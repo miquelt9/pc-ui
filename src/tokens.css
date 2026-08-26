@@ -1,0 +1,26 @@
+:root {
+  /* Colors */
+  --pc-desktop-bg: rgb(146, 246, 251);
+  --pc-chrome-bg: #EEF2F5;
+  --pc-chrome-dark: #B5B5B5;
+  --pc-window-body-bg: #FFFFFF;
+  --pc-titlebar-bg: rgb(106, 166, 240);
+  --pc-titlebar-text: #FFFFFF;
+  --pc-terminal-bg: #171421;
+  --pc-terminal-titlebar: #2C2C2C;
+  --pc-terminal-text: #FFFFFF;
+  --pc-text-main: #000000;
+  --pc-text-muted: #555555;
+  --pc-link: #0907ec;
+  --pc-link-visited: #572191;
+  --pc-link-active: #FF0000;
+  
+  /* Bevel Borders */
+  --pc-bevel-light: #FEFFFF;
+  --pc-bevel-dark: #808080;
+  --pc-bevel-shadow: #010101;
+  
+  /* Fonts */
+  --pc-font-family: 'Source Code Pro', monospace;
+  --pc-font-sans: 'Source Code Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
