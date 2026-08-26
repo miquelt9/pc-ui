@@ -48,13 +48,18 @@ Exports:
 - Terminal: `--pc-terminal-bg`, `--pc-terminal-titlebar`
 - Bevel: `--pc-bevel-light`, `--pc-bevel-dark`, `--pc-bevel-shadow`
 - Font: `--pc-font-family` (Source Code Pro)
+- Tile gap / grow: `--pc-tile-gap`, `--pc-tile-grow`
 
 ### Useful classes
 
 | Class | Role |
 | --- | --- |
 | `.pc-desktop` | Full-viewport cyan desktop |
-| `.pc-window` / `--dark` | Window chrome |
+| `.pc-desktop--tiled` | Column shell: workspace + taskbar |
+| `.pc-workspace` | Flex root for tiled panes |
+| `.pc-split--row` / `.pc-split--col` | Nested i3-style splits |
+| `.pc-tile` | Optional flex cell wrapper |
+| `.pc-window` / `--dark` / `--fill` | Window chrome; `--fill` fills its tile |
 | `.pc-titlebar` / `--dark` | Title bar |
 | `.pc-titlebar-btn` | `_` `□` `X` controls |
 | `.pc-window-content` / `--plain` | Inset body |
@@ -70,6 +75,9 @@ Exports:
 import "@miquelt9/pc-ui/primitives.css";
 import {
   Button,
+  Desktop,
+  Workspace,
+  Split,
   Window,
   TitleBar,
   Input,
@@ -80,44 +88,51 @@ import {
 
 export function Example() {
   return (
-    <div className="pc-desktop">
-      <Window
-        title="My Computer"
-        onMinimize={() => {}}
-        onMaximize={() => {}}
-        onClose={() => {}}
-      >
-        <p>Welcome to pc-ui</p>
-        <Button variant="primary">OK</Button>
-        <Input placeholder="Type something..." />
-      </Window>
-
+    <Desktop tiled>
+      <Workspace>
+        <Split direction="row">
+          <Window fill title="Editor" grow={2}>
+            <p>Welcome to pc-ui</p>
+            <Button variant="primary">OK</Button>
+            <Input placeholder="Type something..." />
+          </Window>
+          <Split direction="col" grow={1}>
+            <Window fill title="Preview">…</Window>
+            <Window fill title="Terminal" variant="dark">…</Window>
+          </Split>
+        </Split>
+      </Workspace>
       <Taskbar>
         <button type="button" className="pc-button pc-start-btn">
           Start
         </button>
         <div className="pc-taskbar-clock">12:00 PM</div>
       </Taskbar>
-    </div>
+    </Desktop>
   );
 }
 ```
 
 | Component | Notes |
 | --- | --- |
+| `Desktop` | `tiled` → workspace fills viewport above taskbar |
+| `Workspace` | Flex root for splits / fill windows |
+| `Split` | `direction`: `row` \| `col`; optional `grow` |
 | `Button` | `variant`: `default` \| `primary`; `active` pressed look |
 | `TitleBar` | `title`, `icon`, `variant`, `onMinimize` / `onMaximize` / `onClose`, `controls` |
-| `Window` | Composes `TitleBar`; `contentVariant`: `default` \| `plain` |
+| `Window` | `fill` + `grow` for tiles; `contentVariant`: `default` \| `plain` |
 | `Input` / `Select` / `TextArea` | Native elements + `.pc-*` classes |
 | `Taskbar` | `<footer className="pc-taskbar">` |
 
-Wrappers are presentational only. No drag, resize, or window manager.
+Wrappers are presentational only. Tiling is layout CSS — no drag, resize handles, or i3 keybinds.
 
 ## Consumer patterns
 
 **Vanilla (github.io):** import primitives once; alias existing classes (`.mainbox`, `.topbar`, …) onto package styles so HTML/JS stay unchanged.
 
 **React:** import primitives + components; replace zinc/glass chrome with windows and taskbar; keep print/PDF layouts free of Win98 decoration.
+
+**Multi-pane fullscreen:** use `Desktop tiled` + nested `Split` + `Window fill` (see example above).
 
 ## Develop this package
 

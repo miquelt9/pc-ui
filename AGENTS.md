@@ -10,7 +10,9 @@ Presentational Windows 9x chrome only:
 - CSS primitives (`.pc-window`, `.pc-button`, `.pc-taskbar`, …)
 - Thin React wrappers (`Button`, `Window`, `TitleBar`, `Input`/`Select`/`TextArea`, `Taskbar`)
 
-It does **not** include window dragging, z-index managers, routing, or game logic. Consumers keep their own JS/behavior.
+It does **not** include window dragging, keyboard tiling bindings, z-index managers, routing, or game logic. Consumers keep their own JS/behavior.
+
+It **does** support presentational i3-style tiling: nested horizontal/vertical splits whose leaf windows fill their cells (fullscreen *within the layout*, not browser Fullscreen API).
 
 ## Install
 
@@ -94,7 +96,45 @@ Squared corners. No rounded-3xl glass docks, emerald gradients, or purple AI-def
    - Controls / modals → `Button`, `Input`, `Select`, `TextArea`
    - Mini-player → small `Window`, not a glass dock
 
-7. Do **not** make Bingo a full desktop OS (no drag/resize windows unless explicitly requested).
+7. Do **not** make Bingo a full desktop OS (no drag/resize / i3 keybinds unless explicitly requested). Use `Desktop tiled` + `Workspace` + `Split` + `Window fill` when you need multi-pane fullscreen layouts.
+
+## Tiling layout (i3-style)
+
+Presentational only — no move/focus/keybind manager.
+
+```tsx
+import {
+  Desktop,
+  Workspace,
+  Split,
+  Window,
+  Taskbar,
+} from "@miquelt9/pc-ui";
+
+<Desktop tiled>
+  <Workspace>
+    <Split direction="row">
+      <Window fill title="Editor" grow={2}>…</Window>
+      <Split direction="col" grow={1}>
+        <Window fill title="Preview">…</Window>
+        <Window fill title="Terminal" variant="dark">…</Window>
+      </Split>
+    </Split>
+  </Workspace>
+  <Taskbar>…</Taskbar>
+</Desktop>
+```
+
+CSS equivalent:
+
+- `.pc-desktop--tiled` — column shell; workspace grows, taskbar fixed
+- `.pc-workspace` — flex root for tiles
+- `.pc-split--row` / `.pc-split--col` — nested splits
+- `.pc-window--fill` — leaf fills its cell; content scrolls
+- `--pc-tile-grow` — relative size (also `grow` prop on `Window` / `Split`)
+- `--pc-tile-gap` — gap between tiles (default `0`)
+
+Single maximized pane: one `Window fill` directly inside `Workspace`.
 
 ## Component checklist
 
@@ -105,6 +145,10 @@ Squared corners. No rounded-3xl glass docks, emerald gradients, or purple AI-def
 | Window frame | `<Window>` or `.pc-window` + `.pc-window-content` |
 | Dark/terminal | `variant="dark"` / `.pc-window--dark` |
 | Plain content (no inset body) | `contentVariant="plain"` |
+| Fill tile / pane | `fill` / `.pc-window--fill` |
+| Tiled desktop shell | `<Desktop tiled>` / `.pc-desktop--tiled` |
+| Tile root | `<Workspace>` / `.pc-workspace` |
+| Horizontal / vertical split | `<Split direction="row\|col">` / `.pc-split--*` |
 | Text field | `<Input>` / `.pc-input` |
 | Select / textarea | `<Select>` / `<TextArea>` |
 | Bottom bar | `<Taskbar>` / `.pc-taskbar` |
@@ -114,7 +158,7 @@ Squared corners. No rounded-3xl glass docks, emerald gradients, or purple AI-def
 
 - Changing the GitHub profile README repo (`miquelt9/miquelt9`)
 - Goose, custom cursor, or games from the personal site
-- Draggable/resizable Bingo windows
+- Draggable/resizable Bingo windows or i3 keybind emulation
 - Publishing to npm (GitHub install is enough)
 
 ## Changing this package

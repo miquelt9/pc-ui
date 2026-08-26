@@ -25,6 +25,75 @@
   color: var(--pc-text-main);
 }
 
+/* Full-viewport shell: workspace fills remaining space above a fixed taskbar */
+.pc-desktop--tiled {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.pc-desktop--tiled > .pc-workspace {
+  flex: 1;
+  min-height: 0;
+}
+
+.pc-desktop--tiled > .pc-taskbar {
+  flex-shrink: 0;
+}
+
+/*
+ * Tiling workspace (i3-like, presentational):
+ * nest .pc-split--row / .pc-split--col and put .pc-window--fill leaves in each cell.
+ * Ratio: set --pc-tile-grow on a split child (default 1). Gap: --pc-tile-gap.
+ */
+.pc-workspace {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  gap: var(--pc-tile-gap);
+}
+
+.pc-split {
+  display: flex;
+  flex: var(--pc-tile-grow, 1) 1 0;
+  min-width: 0;
+  min-height: 0;
+  gap: var(--pc-tile-gap);
+}
+
+.pc-split--row {
+  flex-direction: row;
+}
+
+.pc-split--col {
+  flex-direction: column;
+}
+
+.pc-tile {
+  display: flex;
+  flex-direction: column;
+  flex: var(--pc-tile-grow, 1) 1 0;
+  min-width: 0;
+  min-height: 0;
+}
+
+.pc-workspace > .pc-window--fill,
+.pc-workspace > .pc-split,
+.pc-workspace > .pc-tile,
+.pc-split > .pc-window--fill,
+.pc-split > .pc-split,
+.pc-split > .pc-tile {
+  flex: var(--pc-tile-grow, 1) 1 0;
+  min-width: 0;
+  min-height: 0;
+}
+
 /* Window */
 .pc-window {
   background-color: var(--pc-chrome-bg);
@@ -46,6 +115,24 @@
   border-right: solid 2px var(--pc-bevel-dark);
   box-shadow: 2px 2px 0 var(--pc-bevel-shadow);
   color: var(--pc-terminal-text);
+}
+
+/* Fill parent tile / workspace (fullscreen within that cell, not browser fullscreen) */
+.pc-window--fill {
+  width: 100%;
+  height: 100%;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.pc-window--fill > .pc-titlebar {
+  flex-shrink: 0;
+}
+
+.pc-window--fill > .pc-window-content {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
 }
 
 /* Titlebar */
