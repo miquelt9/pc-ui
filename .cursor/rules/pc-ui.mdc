@@ -5,13 +5,14 @@ alwaysApply: true
 
 # pc-ui
 
-This repo is `@miquelt9/pc-ui` — Windows 9x CSS tokens, primitives, and thin React wrappers.
+This repo is `@miquelt9/pc-ui` — Windows 9x CSS tokens, primitives, and optional React wrappers.
 
-When changing this package or helping wire it into consumers (miquelt9.github.io, bingo-musical, etc.), follow [AGENTS.md](../../AGENTS.md):
+Follow [AGENTS.md](../../AGENTS.md):
 
-- CSS-first; import `@miquelt9/pc-ui/primitives.css` separately from JS
+- **CSS-first.** Vanilla sites (miquelt9.github.io) get one file: `src/pc-ui.css` via `<link>` or a copied `css/pc-ui.css`. No npm/React/bundler on that site.
+- React apps import `@miquelt9/pc-ui/pc-ui.css` plus optional components; React peers are optional.
+- After editing `tokens.css` / `primitives.css`, run `npm run build` (regenerates `pc-ui.css`).
 - Keep React wrappers presentational (no drag/window manager keybinds)
 - Preserve visual tokens; do not reinvent colors or bevels
-- For multi-pane fullscreen layouts, use `Desktop tiled` + `Workspace` + `Split` + `Window fill` (see AGENTS.md)
-- Vanilla sites: alias existing classes onto `.pc-*`
+- Multi-pane fullscreen: `Desktop tiled` + `Workspace` + `Split` + `Window fill` (or the same CSS classes in HTML)
 - Bingo: restyle chrome only; keep print/PDF white and non-Win98

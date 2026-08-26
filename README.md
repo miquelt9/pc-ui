@@ -1,18 +1,38 @@
 # @miquelt9/pc-ui
 
-Retro Windows 9x-style design system: CSS tokens, bevelled primitives, and thin React wrappers.
+Retro Windows 9x-style design system: **CSS first**, optional thin React wrappers.
 
-Shared visual language for [miquelt9.github.io](https://github.com/miquelt9/miquelt9.github.io) (vanilla) and React apps such as bingo-musical.
+Shared look for [miquelt9.github.io](https://github.com/miquelt9/miquelt9.github.io) (vanilla HTML/CSS/JS) and React apps such as bingo-musical.
 
-For agent-oriented wiring steps, see [AGENTS.md](./AGENTS.md).
+For agent wiring steps, see [AGENTS.md](./AGENTS.md).
 
-## Installation
+## Vanilla (github.io) — no npm
+
+The personal site stays plain static files. Use **one stylesheet**:
+
+```html
+<link rel="stylesheet" href="css/pc-ui.css">
+```
+
+Copy from this repo:
+
+```bash
+cp ../pc-ui/src/pc-ui.css path/to/miquelt9.github.io/css/pc-ui.css
+```
+
+Or CDN:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miquelt9/pc-ui@main/src/pc-ui.css">
+```
+
+Then use classes like `.pc-window`, `.pc-titlebar`, `.pc-button`, `.pc-taskbar`, or alias your existing `.mainbox` / `.topbar` rules onto the same tokens. Keep your window-manager JS — you do **not** need React or a bundler.
+
+## React / npm apps
 
 ```bash
 npm install github:miquelt9/pc-ui
 ```
-
-Local sibling checkout:
 
 ```json
 {
@@ -22,23 +42,20 @@ Local sibling checkout:
 }
 ```
 
-Peer deps: `react` and `react-dom` `>=18` (only needed if you import React components).
-
-## CSS
-
-Import styles separately — the JS entry does not inject CSS.
-
 ```css
-@import "@miquelt9/pc-ui/primitives.css";
+@import "@miquelt9/pc-ui/pc-ui.css";
 ```
 
-Exports:
+React is an **optional** peer (only if you import components from `@miquelt9/pc-ui`).
+
+### CSS exports
 
 | Import | What it is |
 | --- | --- |
-| `@miquelt9/pc-ui/tokens.css` | `:root` CSS variables |
-| `@miquelt9/pc-ui/primitives.css` | Tokens + component classes |
-| `@miquelt9/pc-ui/style.css` | Alias of `primitives.css` |
+| `@miquelt9/pc-ui/pc-ui.css` | Single-file bundle (preferred) |
+| `@miquelt9/pc-ui/style.css` | Alias of `pc-ui.css` |
+| `@miquelt9/pc-ui/tokens.css` | `:root` variables only |
+| `@miquelt9/pc-ui/primitives.css` | Tokens via `@import` + classes |
 
 ### Tokens (high level)
 
@@ -69,10 +86,10 @@ Exports:
 | `.pc-bevel-outset` / `.pc-bevel-inset` | Bevel helpers |
 | `.pc-link` | Classic link colors |
 
-## React
+## React components
 
 ```tsx
-import "@miquelt9/pc-ui/primitives.css";
+import "@miquelt9/pc-ui/pc-ui.css";
 import {
   Button,
   Desktop,
@@ -124,24 +141,16 @@ export function Example() {
 | `Input` / `Select` / `TextArea` | Native elements + `.pc-*` classes |
 | `Taskbar` | `<footer className="pc-taskbar">` |
 
-Wrappers are presentational only. Tiling is layout CSS — no drag, resize handles, or i3 keybinds.
-
-## Consumer patterns
-
-**Vanilla (github.io):** import primitives once; alias existing classes (`.mainbox`, `.topbar`, …) onto package styles so HTML/JS stay unchanged.
-
-**React:** import primitives + components; replace zinc/glass chrome with windows and taskbar; keep print/PDF layouts free of Win98 decoration.
-
-**Multi-pane fullscreen:** use `Desktop tiled` + nested `Split` + `Window fill` (see example above).
+Presentational only. Tiling is layout CSS — no drag, resize handles, or i3 keybinds.
 
 ## Develop this package
 
 ```bash
 npm install
-npm run build
+npm run build   # bundles src/pc-ui.css then tsc → dist/
 ```
 
-`tsc` emits ESM + declarations under `dist/`. CSS ships from `src/` via package `exports`.
+Commit `src/pc-ui.css` so vanilla sites can copy it without Node.
 
 ## License
 
