@@ -1,10 +1,16 @@
-:root {
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap");
+
+:root,
+.pc-theme-light,
+[data-pc-theme="light"] {
+  color-scheme: light;
+
   /* Colors */
   --pc-desktop-bg: rgb(146, 246, 251);
   --pc-chrome-bg: #EEF2F5;
   --pc-chrome-dark: #B5B5B5;
   --pc-window-body-bg: #FFFFFF;
-  --pc-titlebar-bg: rgb(106, 166, 240);
+  --pc-titlebar-bg: #1E5AA8;
   --pc-titlebar-text: #FFFFFF;
   --pc-terminal-bg: #171421;
   --pc-terminal-titlebar: #2C2C2C;
@@ -13,18 +19,154 @@
   --pc-text-muted: #555555;
   --pc-link: #0907ec;
   --pc-link-visited: #572191;
-  --pc-link-active: #FF0000;
+  --pc-link-active: #B00000;
+
+  /* Semantic Feedback Colors */
+  --pc-color-error: #9B1C1C;
+  --pc-color-error-bg: #FDECEC;
+  --pc-color-warning: #7A5B00;
+  --pc-color-warning-bg: #FFF4CC;
+  --pc-color-success: #0B5D1E;
+  --pc-color-success-bg: #E3F6E8;
+  --pc-color-info: #0A4A8A;
+  --pc-color-info-bg: #E6F1FB;
+
+  /* Interactive & Forms */
+  --pc-button-hover-bg: #F4F7F9;
+  --pc-button-active-bg: #E2E7EB;
+  --pc-input-bg: var(--pc-window-body-bg);
+  --pc-titlebar-btn-fg: var(--pc-text-main);
+  --pc-titlebar-btn-fg-dark: var(--pc-terminal-text);
+  --pc-focus-ring: 2px dotted var(--pc-text-main);
+  --pc-focus-ring-offset: 2px;
   
   /* Bevel Borders */
   --pc-bevel-light: #FEFFFF;
   --pc-bevel-dark: #808080;
   --pc-bevel-shadow: #010101;
+  --pc-bevel-inset-shadow: var(--pc-bevel-shadow);
   
-  /* Fonts */
+  /* Typography Scale */
   --pc-font-family: 'Source Code Pro', monospace;
   --pc-font-sans: 'Source Code Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --pc-font-size-xs: 0.75rem;
+  --pc-font-size-sm: 0.875rem;
+  --pc-font-size-md: 1rem;
+  --pc-line-height-tight: 1.2;
+  --pc-line-height-body: 1.45;
 
-  /* Tiling workspace (i3-style splits; presentational only) */
+  /* Spacing Scale (2px grid) */
+  --pc-space-1: 2px;
+  --pc-space-2: 4px;
+  --pc-space-3: 8px;
+  --pc-space-4: 12px;
+  --pc-space-5: 16px;
+
+  /* Tiled workspace (presentational splits) */
   --pc-tile-gap: 0px;
   --pc-tile-grow: 1;
+
+  /* Overlay / dialogs */
+  --pc-overlay-bg: rgba(0, 0, 0, 0.35);
+  --pc-overlay-z: 1000;
+}
+
+.pc-theme-dark,
+[data-pc-theme="dark"] {
+  color-scheme: dark;
+
+  /* Colors */
+  --pc-desktop-bg: #0d454c;
+  --pc-chrome-bg: #3a4048;
+  --pc-chrome-dark: #25292e;
+  --pc-window-body-bg: #1a1e24;
+  --pc-titlebar-bg: #2B6CB0;
+  --pc-titlebar-text: #FFFFFF;
+  --pc-terminal-bg: #171421;
+  --pc-terminal-titlebar: #2C2C2C;
+  --pc-terminal-text: #FFFFFF;
+  --pc-text-main: #e8eaed;
+  --pc-text-muted: #9aa0a6;
+  --pc-link: #8cb4ff;
+  --pc-link-visited: #c9a0e8;
+  --pc-link-active: #ff6b6b;
+
+  /* Semantic Feedback Colors */
+  --pc-color-error: #F87171;
+  --pc-color-error-bg: #3F1D1D;
+  --pc-color-warning: #FBBF24;
+  --pc-color-warning-bg: #3B2D05;
+  --pc-color-success: #34D399;
+  --pc-color-success-bg: #0F3826;
+  --pc-color-info: #60A5FA;
+  --pc-color-info-bg: #132845;
+
+  /* Interactive & Forms */
+  --pc-button-hover-bg: #454c55;
+  --pc-button-active-bg: #2c3138;
+  --pc-input-bg: #1a1e24;
+  --pc-titlebar-btn-fg: var(--pc-text-main);
+  --pc-titlebar-btn-fg-dark: var(--pc-terminal-text);
+  --pc-focus-ring: 2px dotted var(--pc-text-main);
+  --pc-focus-ring-offset: 2px;
+
+  /* Bevel Borders */
+  --pc-bevel-light: #6c737c;
+  --pc-bevel-dark: #1a1d20;
+  --pc-bevel-shadow: #010101;
+  --pc-bevel-inset-shadow: var(--pc-bevel-shadow);
+
+  /* Overlay / dialogs */
+  --pc-overlay-bg: rgba(0, 0, 0, 0.55);
+}
+
+@media (prefers-color-scheme: dark) {
+  .pc-theme-system,
+  [data-pc-theme="system"] {
+    color-scheme: dark;
+
+    /* Colors */
+    --pc-desktop-bg: #0d454c;
+    --pc-chrome-bg: #3a4048;
+    --pc-chrome-dark: #25292e;
+    --pc-window-body-bg: #1a1e24;
+    --pc-titlebar-bg: #2B6CB0;
+    --pc-titlebar-text: #FFFFFF;
+    --pc-terminal-bg: #171421;
+    --pc-terminal-titlebar: #2C2C2C;
+    --pc-terminal-text: #FFFFFF;
+    --pc-text-main: #e8eaed;
+    --pc-text-muted: #9aa0a6;
+    --pc-link: #8cb4ff;
+    --pc-link-visited: #c9a0e8;
+    --pc-link-active: #ff6b6b;
+
+    /* Semantic Feedback Colors */
+    --pc-color-error: #F87171;
+    --pc-color-error-bg: #3F1D1D;
+    --pc-color-warning: #FBBF24;
+    --pc-color-warning-bg: #3B2D05;
+    --pc-color-success: #34D399;
+    --pc-color-success-bg: #0F3826;
+    --pc-color-info: #60A5FA;
+    --pc-color-info-bg: #132845;
+
+    /* Interactive & Forms */
+    --pc-button-hover-bg: #454c55;
+    --pc-button-active-bg: #2c3138;
+    --pc-input-bg: #1a1e24;
+    --pc-titlebar-btn-fg: var(--pc-text-main);
+    --pc-titlebar-btn-fg-dark: var(--pc-terminal-text);
+    --pc-focus-ring: 2px dotted var(--pc-text-main);
+    --pc-focus-ring-offset: 2px;
+
+    /* Bevel Borders */
+    --pc-bevel-light: #6c737c;
+    --pc-bevel-dark: #1a1d20;
+    --pc-bevel-shadow: #010101;
+    --pc-bevel-inset-shadow: var(--pc-bevel-shadow);
+
+    /* Overlay / dialogs */
+    --pc-overlay-bg: rgba(0, 0, 0, 0.55);
+  }
 }

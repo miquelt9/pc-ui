@@ -1,13 +1,13 @@
 import React from "react";
 
 export interface SplitProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** `row` = side-by-side (i3 horizontal), `col` = stacked (i3 vertical). */
+  /** `row` = side-by-side, `col` = stacked. */
   direction?: "row" | "col";
   /** Flex grow factor for this split within its parent (`--pc-tile-grow`). */
   grow?: number;
 }
 
-/** Nested horizontal/vertical split for i3-style tiling. */
+/** Nested horizontal/vertical split for tiled panes. */
 export const Split = React.forwardRef<HTMLDivElement, SplitProps>(
   ({ className = "", direction = "row", grow, children, style, ...props }, ref) => {
     const classNames = ["pc-split", `pc-split--${direction}`, className]

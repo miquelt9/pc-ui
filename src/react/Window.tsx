@@ -6,7 +6,7 @@ export interface WindowProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 
   icon?: React.ReactNode;
   variant?: "default" | "dark";
   contentVariant?: "default" | "plain";
-  /** Fill parent workspace/split tile (i3-style leaf). */
+  /** Fill parent workspace/split cell. */
   fill?: boolean;
   /** Flex grow factor when tiled (`--pc-tile-grow`). */
   grow?: number;

@@ -1,5 +1,19 @@
 @import "./tokens.css";
 
+[class^="pc-"],
+[class*=" pc-"] {
+  box-sizing: border-box;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pc-button:active,
+  .pc-button.active,
+  .pc-button[aria-pressed="true"],
+  .pc-titlebar-btn:active {
+    transform: none;
+  }
+}
+
 /* Box Bevel Mixin / Primitives */
 .pc-bevel-outset {
   border-top: solid 2px var(--pc-bevel-light);
@@ -14,7 +28,7 @@
   border-left: solid 2px var(--pc-bevel-dark);
   border-bottom: solid 2px var(--pc-bevel-light);
   border-right: solid 2px var(--pc-bevel-light);
-  box-shadow: inset 1px 1px 0 #000;
+  box-shadow: inset 1px 1px 0 var(--pc-bevel-inset-shadow, var(--pc-bevel-shadow));
 }
 
 /* Desktop */
@@ -45,7 +59,7 @@
 }
 
 /*
- * Tiling workspace (i3-like, presentational):
+ * Tiled workspace (presentational):
  * nest .pc-split--row / .pc-split--col and put .pc-window--fill leaves in each cell.
  * Ratio: set --pc-tile-grow on a split child (default 1). Gap: --pc-tile-gap.
  */
@@ -143,7 +157,7 @@
   justify-content: space-between;
   background: var(--pc-titlebar-bg);
   padding: 4px 6px;
-  font-size: 1rem;
+  font-size: var(--pc-font-size-md, 1rem);
   font-weight: bold;
   color: var(--pc-titlebar-text);
   user-select: none;
@@ -180,10 +194,10 @@
   box-shadow: 1px 1px 0 var(--pc-bevel-shadow);
   min-width: 18px;
   height: 18px;
-  font-size: 0.75rem;
+  font-size: var(--pc-font-size-xs, 0.75rem);
   font-weight: bold;
   line-height: 1;
-  color: #000000;
+  color: var(--pc-titlebar-btn-fg, var(--pc-text-main));
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -204,24 +218,49 @@
   background-color: var(--pc-terminal-titlebar);
   border-top: solid 1px var(--pc-bevel-light);
   border-left: solid 1px var(--pc-bevel-light);
-  color: #ffffff;
+  color: var(--pc-titlebar-btn-fg-dark, var(--pc-terminal-text));
 }
 
 /* Window Content Body */
 .pc-window-content {
-  padding: 8px;
+  padding: var(--pc-space-3, 8px);
   background-color: var(--pc-window-body-bg);
   color: var(--pc-text-main);
   border-top: solid 1px var(--pc-bevel-dark);
   border-left: solid 1px var(--pc-bevel-dark);
   border-bottom: solid 1px var(--pc-bevel-light);
   border-right: solid 1px var(--pc-bevel-light);
+  scrollbar-width: thin;
+  scrollbar-color: var(--pc-chrome-bg) var(--pc-window-body-bg);
+}
+
+.pc-window-content::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+.pc-window-content::-webkit-scrollbar-track {
+  background: var(--pc-chrome-bg);
+  border-left: solid 1px var(--pc-bevel-light);
+}
+
+.pc-window-content::-webkit-scrollbar-thumb {
+  background-color: var(--pc-chrome-bg);
+  border-top: solid 2px var(--pc-bevel-light);
+  border-left: solid 2px var(--pc-bevel-light);
+  border-bottom: solid 2px var(--pc-bevel-dark);
+  border-right: solid 2px var(--pc-bevel-dark);
+  box-shadow: 1px 1px 0 var(--pc-bevel-shadow);
 }
 
 .pc-window-content--plain {
-  padding: 8px;
+  padding: var(--pc-space-3, 8px);
   background-color: transparent;
   border: none;
+}
+
+.pc-window--dark > .pc-window-content--plain {
+  color: var(--pc-terminal-text);
 }
 
 /* Button */
@@ -235,7 +274,7 @@
   box-shadow: 2px 2px 0 var(--pc-bevel-shadow);
   color: var(--pc-text-main);
   font-family: var(--pc-font-family);
-  font-size: 0.875rem;
+  font-size: var(--pc-font-size-sm, 0.875rem);
   font-weight: 600;
   cursor: pointer;
   display: inline-flex;
@@ -247,7 +286,7 @@
 }
 
 .pc-button:hover {
-  background-color: #F4F7F9;
+  background-color: var(--pc-button-hover-bg);
 }
 
 .pc-button:active,
@@ -259,7 +298,7 @@
   border-right: solid 2px var(--pc-bevel-light);
   box-shadow: none;
   transform: translate(1px, 1px);
-  background-color: #E2E7EB;
+  background-color: var(--pc-button-active-bg);
 }
 
 .pc-button:disabled {
@@ -268,9 +307,14 @@
   box-shadow: none;
 }
 
+.pc-button[aria-busy="true"] {
+  cursor: progress;
+  opacity: 0.8;
+}
+
 .pc-button--primary {
   font-weight: bold;
-  outline: 1px dotted #000;
+  outline: 1px dotted var(--pc-text-main);
   outline-offset: -4px;
 }
 
@@ -278,10 +322,10 @@
 .pc-input,
 .pc-select,
 .pc-textarea {
-  background-color: #FFFFFF;
+  background-color: var(--pc-input-bg);
   color: var(--pc-text-main);
   font-family: var(--pc-font-family);
-  font-size: 0.875rem;
+  font-size: var(--pc-font-size-sm, 0.875rem);
   padding: 4px 6px;
   border-top: solid 2px var(--pc-bevel-dark);
   border-left: solid 2px var(--pc-bevel-dark);
@@ -293,7 +337,324 @@
 .pc-input:focus,
 .pc-select:focus,
 .pc-textarea:focus {
-  outline: 1px dotted #000000;
+  outline: var(--pc-focus-ring);
+  outline-offset: var(--pc-focus-ring-offset);
+}
+
+.pc-input:disabled,
+.pc-select:disabled,
+.pc-textarea:disabled {
+  background-color: var(--pc-chrome-bg);
+  color: var(--pc-text-muted);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.pc-input[readonly],
+.pc-textarea[readonly] {
+  background-color: var(--pc-chrome-bg);
+  cursor: default;
+}
+
+.pc-input::placeholder,
+.pc-textarea::placeholder {
+  color: var(--pc-text-muted);
+  opacity: 0.8;
+}
+
+.pc-input[aria-invalid="true"],
+.pc-select[aria-invalid="true"],
+.pc-textarea[aria-invalid="true"],
+.pc-input.pc-input--error,
+.pc-select.pc-select--error,
+.pc-textarea.pc-textarea--error {
+  border-color: var(--pc-color-error);
+  outline: 1px solid var(--pc-color-error);
+  outline-offset: 0;
+}
+
+/* Focus-visible outline for interactive elements */
+.pc-button:focus-visible,
+.pc-titlebar-btn:focus-visible,
+.pc-menubar-item:focus-visible,
+.pc-menu-item:focus-visible,
+.pc-link:focus-visible,
+.pc-input:focus-visible,
+.pc-select:focus-visible,
+.pc-textarea:focus-visible,
+.pc-tab:focus-visible {
+  outline: var(--pc-focus-ring);
+  outline-offset: var(--pc-focus-ring-offset);
+}
+
+/* Field (Form Label + Control + Error Text) */
+.pc-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pc-space-1, 2px);
+  margin-bottom: var(--pc-space-3, 8px);
+  font-family: var(--pc-font-family);
+  font-size: var(--pc-font-size-sm, 0.875rem);
+}
+
+.pc-field-label {
+  font-weight: 600;
+  color: var(--pc-text-main);
+}
+
+.pc-field-error {
+  margin-top: var(--pc-space-1, 2px);
+  font-size: var(--pc-font-size-xs, 0.75rem);
+  color: var(--pc-color-error);
+}
+
+/* Checkbox & Radio */
+.pc-checkbox,
+.pc-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--pc-font-family);
+  font-size: var(--pc-font-size-sm, 0.875rem);
+  color: var(--pc-text-main);
+  cursor: pointer;
+  user-select: none;
+}
+
+.pc-checkbox input[type="checkbox"],
+.pc-radio input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  background-color: var(--pc-input-bg);
+  border-top: solid 2px var(--pc-bevel-dark);
+  border-left: solid 2px var(--pc-bevel-dark);
+  border-bottom: solid 2px var(--pc-bevel-light);
+  border-right: solid 2px var(--pc-bevel-light);
+  box-shadow: inset 1px 1px 0 var(--pc-bevel-inset-shadow, var(--pc-bevel-shadow));
+  cursor: pointer;
+  display: grid;
+  place-content: center;
+  outline: none;
+}
+
+.pc-checkbox input[type="checkbox"]:focus-visible,
+.pc-radio input[type="radio"]:focus-visible {
+  outline: var(--pc-focus-ring);
+  outline-offset: var(--pc-focus-ring-offset);
+}
+
+.pc-checkbox input[type="checkbox"]:checked::before {
+  content: "✔";
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--pc-text-main);
+  transform: translateY(-1px);
+}
+
+.pc-radio input[type="radio"] {
+  border-radius: 50%;
+}
+
+.pc-radio input[type="radio"]:checked::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background-color: var(--pc-text-main);
+  border-radius: 50%;
+}
+
+.pc-checkbox input[type="checkbox"]:disabled,
+.pc-radio input[type="radio"]:disabled {
+  background-color: var(--pc-chrome-bg);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Badge */
+.pc-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px 6px;
+  font-family: var(--pc-font-family);
+  font-size: var(--pc-font-size-xs, 0.75rem);
+  font-weight: 600;
+  line-height: 1.2;
+  border-top: solid 1px var(--pc-bevel-light);
+  border-left: solid 1px var(--pc-bevel-light);
+  border-bottom: solid 1px var(--pc-bevel-dark);
+  border-right: solid 1px var(--pc-bevel-dark);
+  background-color: var(--pc-chrome-bg);
+  color: var(--pc-text-main);
+  box-shadow: 1px 1px 0 var(--pc-bevel-shadow);
+}
+
+.pc-badge--error {
+  background-color: var(--pc-color-error-bg);
+  color: var(--pc-color-error);
+  border-color: var(--pc-color-error);
+}
+
+.pc-badge--warning {
+  background-color: var(--pc-color-warning-bg);
+  color: var(--pc-color-warning);
+  border-color: var(--pc-color-warning);
+}
+
+.pc-badge--success {
+  background-color: var(--pc-color-success-bg);
+  color: var(--pc-color-success);
+  border-color: var(--pc-color-success);
+}
+
+.pc-badge--info {
+  background-color: var(--pc-color-info-bg);
+  color: var(--pc-color-info);
+  border-color: var(--pc-color-info);
+}
+
+/* Toast */
+.pc-toast {
+  background-color: var(--pc-chrome-bg);
+  padding: 4px;
+  border-top: solid 2px var(--pc-bevel-light);
+  border-left: solid 2px var(--pc-bevel-light);
+  border-bottom: solid 2px var(--pc-bevel-dark);
+  border-right: solid 2px var(--pc-bevel-dark);
+  box-shadow: 2px 2px 0 var(--pc-bevel-shadow);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--pc-font-family);
+  min-width: 240px;
+  max-width: 360px;
+}
+
+.pc-toast-body {
+  padding: var(--pc-space-3, 8px);
+  background-color: var(--pc-window-body-bg);
+  color: var(--pc-text-main);
+  border-top: solid 1px var(--pc-bevel-dark);
+  border-left: solid 1px var(--pc-bevel-dark);
+  border-bottom: solid 1px var(--pc-bevel-light);
+  border-right: solid 1px var(--pc-bevel-light);
+  font-size: var(--pc-font-size-sm, 0.875rem);
+}
+
+/* Tabs */
+.pc-tabs {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--pc-font-family);
+}
+
+.pc-tab-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin: 0;
+  padding: 0 4px;
+  list-style: none;
+  position: relative;
+  z-index: 1;
+}
+
+.pc-tab {
+  background-color: var(--pc-chrome-bg);
+  padding: 4px 10px;
+  font-family: inherit;
+  font-size: var(--pc-font-size-sm, 0.875rem);
+  font-weight: 600;
+  color: var(--pc-text-main);
+  border-top: solid 2px var(--pc-bevel-light);
+  border-left: solid 2px var(--pc-bevel-light);
+  border-right: solid 2px var(--pc-bevel-dark);
+  border-bottom: none;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  top: 2px;
+}
+
+.pc-tab:hover {
+  background-color: var(--pc-button-hover-bg);
+}
+
+.pc-tab[aria-selected="true"],
+.pc-tab.active {
+  background-color: var(--pc-chrome-bg);
+  top: 0;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  font-weight: bold;
+  z-index: 2;
+}
+
+.pc-tab:disabled {
+  color: var(--pc-text-muted);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.pc-tab-panel {
+  background-color: var(--pc-chrome-bg);
+  padding: var(--pc-space-3, 8px);
+  border-top: solid 2px var(--pc-bevel-light);
+  border-left: solid 2px var(--pc-bevel-light);
+  border-bottom: solid 2px var(--pc-bevel-dark);
+  border-right: solid 2px var(--pc-bevel-dark);
+  box-shadow: 2px 2px 0 var(--pc-bevel-shadow);
+  position: relative;
+}
+
+/* Progress Bar */
+.pc-progress {
+  width: 100%;
+  height: 20px;
+  background-color: var(--pc-chrome-bg);
+  border-top: solid 2px var(--pc-bevel-dark);
+  border-left: solid 2px var(--pc-bevel-dark);
+  border-bottom: solid 2px var(--pc-bevel-light);
+  border-right: solid 2px var(--pc-bevel-light);
+  box-shadow: inset 1px 1px 0 var(--pc-bevel-inset-shadow, var(--pc-bevel-shadow));
+  padding: 2px;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+.pc-progress-bar {
+  background-color: var(--pc-titlebar-bg);
+  height: 100%;
+  transition: width 0.1s linear;
+}
+
+.pc-progress--blocks .pc-progress-bar {
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--pc-titlebar-bg),
+    var(--pc-titlebar-bg) 8px,
+    var(--pc-chrome-bg) 8px,
+    var(--pc-chrome-bg) 10px
+  );
+}
+
+/* Accessibility Utility */
+.pc-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* Taskbar */
@@ -350,4 +711,133 @@
 
 .pc-link:active {
   color: var(--pc-link-active);
+}
+
+/* Overlay (dialogs sit as .pc-window children) */
+.pc-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--pc-overlay-z);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: var(--pc-overlay-bg);
+}
+
+/* Menu */
+.pc-menubar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  background-color: var(--pc-chrome-bg);
+  padding: 2px 4px;
+  font-family: var(--pc-font-family);
+}
+
+.pc-menubar-item {
+  background: transparent;
+  border: solid 1px transparent;
+  padding: 2px 8px;
+  font-family: inherit;
+  font-size: var(--pc-font-size-sm, 0.875rem);
+  color: var(--pc-text-main);
+  cursor: pointer;
+}
+
+.pc-menubar-item:hover,
+.pc-menubar-item[aria-expanded="true"] {
+  border-top: solid 1px var(--pc-bevel-light);
+  border-left: solid 1px var(--pc-bevel-light);
+  border-bottom: solid 1px var(--pc-bevel-dark);
+  border-right: solid 1px var(--pc-bevel-dark);
+}
+
+.pc-menu {
+  background-color: var(--pc-chrome-bg);
+  min-width: 160px;
+  padding: 2px;
+  border-top: solid 2px var(--pc-bevel-light);
+  border-left: solid 2px var(--pc-bevel-light);
+  border-bottom: solid 2px var(--pc-bevel-dark);
+  border-right: solid 2px var(--pc-bevel-dark);
+  box-shadow: 2px 2px 0 var(--pc-bevel-shadow);
+  font-family: var(--pc-font-family);
+}
+
+.pc-menu-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 4px 16px;
+  font-family: inherit;
+  font-size: var(--pc-font-size-sm, 0.875rem);
+  color: var(--pc-text-main);
+  cursor: pointer;
+}
+
+.pc-menu-item:hover,
+.pc-menu-item:focus {
+  background: var(--pc-titlebar-bg);
+  color: var(--pc-titlebar-text);
+  outline: none;
+}
+
+.pc-menu-item:disabled {
+  color: var(--pc-text-muted);
+  cursor: not-allowed;
+  background: transparent;
+}
+
+.pc-menu-separator {
+  height: 2px;
+  margin: 3px 4px;
+  border: none;
+  border-top: solid 1px var(--pc-bevel-dark);
+  border-bottom: solid 1px var(--pc-bevel-light);
+  background: transparent;
+}
+
+/* Group box */
+.pc-group {
+  margin: 8px 0 0;
+  padding: 10px 8px 8px;
+  border-top: solid 2px var(--pc-bevel-dark);
+  border-left: solid 2px var(--pc-bevel-dark);
+  border-bottom: solid 2px var(--pc-bevel-light);
+  border-right: solid 2px var(--pc-bevel-light);
+  font-family: var(--pc-font-family);
+}
+
+.pc-group > legend {
+  padding: 0 6px;
+  font-size: var(--pc-font-size-sm, 0.875rem);
+  color: var(--pc-text-main);
+}
+
+/* Status bar */
+.pc-statusbar {
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  padding: 2px;
+  background-color: var(--pc-chrome-bg);
+  font-family: var(--pc-font-family);
+  font-size: 0.8rem;
+}
+
+.pc-statusbar-pane {
+  flex: 1;
+  min-width: 0;
+  padding: 2px 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-top: solid 2px var(--pc-bevel-dark);
+  border-left: solid 2px var(--pc-bevel-dark);
+  border-bottom: solid 2px var(--pc-bevel-light);
+  border-right: solid 2px var(--pc-bevel-light);
 }

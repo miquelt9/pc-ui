@@ -2,6 +2,11 @@
   "name": "@miquelt9/pc-ui",
   "version": "1.1.0",
   "description": "Retro Windows 9x-style Design System (CSS tokens, primitives, optional React components)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/miquelt9/pc-ui.git"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

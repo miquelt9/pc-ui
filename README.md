@@ -1,161 +1,110 @@
 # @miquelt9/pc-ui
 
-Retro Windows 9x-style design system: **CSS first**, optional thin React wrappers.
+Windows 9x-style design system: **CSS first**, optional React wrappers. Presentational only — no window manager.
 
-Shared look for [miquelt9.github.io](https://github.com/miquelt9/miquelt9.github.io) (vanilla HTML/CSS/JS) and React apps such as bingo-musical.
+See [AGENTS.md](./AGENTS.md) for wiring notes.
 
-For agent wiring steps, see [AGENTS.md](./AGENTS.md).
-
-## Vanilla (github.io) — no npm
-
-The personal site stays plain static files. Use **one stylesheet**:
+## Vanilla (HTML/CSS/JS)
 
 ```html
 <link rel="stylesheet" href="css/pc-ui.css">
 ```
 
-Copy from this repo:
-
 ```bash
-cp ../pc-ui/src/pc-ui.css path/to/miquelt9.github.io/css/pc-ui.css
+cp ../pc-ui/src/pc-ui.css css/pc-ui.css
 ```
-
-Or CDN:
 
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miquelt9/pc-ui@main/src/pc-ui.css">
 ```
 
-Then use classes like `.pc-window`, `.pc-titlebar`, `.pc-button`, `.pc-taskbar`, or alias your existing `.mainbox` / `.topbar` rules onto the same tokens. Keep your window-manager JS — you do **not** need React or a bundler.
+Use `.pc-*` classes, or alias your existing names onto them. No npm or React required.
 
-## React / npm apps (bingo-musical)
-
-[bingo-musical](https://github.com/miquelt9/bingo-musical) is Vite + React + Tailwind — install the package, do not copy CSS into `public/`.
+## Bundlers / React
 
 ```bash
 npm install github:miquelt9/pc-ui
 ```
 
-That git install runs `prepare` (builds `dist/` — it is not committed). React 18 is already a Bingo dependency; Tailwind stays in Bingo.
-
-```json
-{
-  "dependencies": {
-    "@miquelt9/pc-ui": "file:../pc-ui"
-  }
-}
-```
+Git installs run `prepare` (builds `dist/`). Local sibling: `"@miquelt9/pc-ui": "file:../pc-ui"`.
 
 ```css
 @import "@miquelt9/pc-ui/pc-ui.css";
 ```
 
-React is an **optional** peer (only if you import components from `@miquelt9/pc-ui`).
+```tsx
+import { Window, Button, Taskbar } from "@miquelt9/pc-ui";
+```
 
-### CSS exports
+React is an optional peer. Theme by overriding CSS variables; mix consumer layout utilities with pc-ui chrome.
 
-| Import | What it is |
+| Export | Role |
 | --- | --- |
-| `@miquelt9/pc-ui/pc-ui.css` | Single-file bundle (preferred) |
+| `@miquelt9/pc-ui/pc-ui.css` | Single-file bundle |
 | `@miquelt9/pc-ui/style.css` | Alias of `pc-ui.css` |
-| `@miquelt9/pc-ui/tokens.css` | `:root` variables only |
-| `@miquelt9/pc-ui/primitives.css` | Tokens via `@import` + classes |
+| `@miquelt9/pc-ui/tokens.css` | Variables |
+| `@miquelt9/pc-ui/primitives.css` | Tokens + classes |
 
-### Tokens (high level)
+### Tokens
 
-- Desktop: `--pc-desktop-bg`
-- Chrome / taskbar: `--pc-chrome-bg`
-- Title bar: `--pc-titlebar-bg` / `--pc-titlebar-text`
-- Terminal: `--pc-terminal-bg`, `--pc-terminal-titlebar`
-- Bevel: `--pc-bevel-light`, `--pc-bevel-dark`, `--pc-bevel-shadow`
-- Font: `--pc-font-family` (Source Code Pro)
-- Tile gap / grow: `--pc-tile-gap`, `--pc-tile-grow`
+- **Colors:** `--pc-desktop-bg`, `--pc-chrome-bg`, `--pc-chrome-dark`, `--pc-window-body-bg`, `--pc-titlebar-bg`, `--pc-titlebar-text`, `--pc-terminal-bg`, `--pc-terminal-titlebar`, `--pc-terminal-text`, `--pc-text-main`, `--pc-text-muted`, `--pc-link`, `--pc-link-visited`, `--pc-link-active`
+- **Semantic Feedback:** `--pc-color-error`, `--pc-color-error-bg`, `--pc-color-warning`, `--pc-color-warning-bg`, `--pc-color-success`, `--pc-color-success-bg`, `--pc-color-info`, `--pc-color-info-bg`
+- **Interactive & Focus:** `--pc-button-hover-bg`, `--pc-button-active-bg`, `--pc-input-bg`, `--pc-focus-ring`, `--pc-focus-ring-offset`
+- **Bevels:** `--pc-bevel-light`, `--pc-bevel-dark`, `--pc-bevel-shadow`, `--pc-bevel-inset-shadow`
+- **Typography & Scale:** `--pc-font-family`, `--pc-font-sans`, `--pc-font-size-xs`, `--pc-font-size-sm`, `--pc-font-size-md`, `--pc-line-height-tight`, `--pc-line-height-body`
+- **Spacing (2px grid):** `--pc-space-1` (2px), `--pc-space-2` (4px), `--pc-space-3` (8px), `--pc-space-4` (12px), `--pc-space-5` (16px)
+- **Layout & Overlay:** `--pc-tile-gap`, `--pc-tile-grow`, `--pc-overlay-bg`, `--pc-overlay-z`
 
-### Useful classes
+### Classes
 
-| Class | Role |
-| --- | --- |
-| `.pc-desktop` | Full-viewport cyan desktop |
-| `.pc-desktop--tiled` | Column shell: workspace + taskbar |
-| `.pc-workspace` | Flex root for tiled panes |
-| `.pc-split--row` / `.pc-split--col` | Nested i3-style splits |
-| `.pc-tile` | Optional flex cell wrapper |
-| `.pc-window` / `--dark` / `--fill` | Window chrome; `--fill` fills its tile |
-| `.pc-titlebar` / `--dark` | Title bar |
-| `.pc-titlebar-btn` | `_` `□` `X` controls |
-| `.pc-window-content` / `--plain` | Inset body |
-| `.pc-button` / `--primary` | Bevelled button |
-| `.pc-input`, `.pc-select`, `.pc-textarea` | Form controls |
-| `.pc-taskbar`, `.pc-start-btn`, `.pc-taskbar-item`, `.pc-taskbar-clock` | Taskbar |
-| `.pc-bevel-outset` / `.pc-bevel-inset` | Bevel helpers |
-| `.pc-link` | Classic link colors |
+`.pc-desktop` / `--tiled` · `.pc-workspace` · `.pc-split--row` / `--col` · `.pc-window` / `--dark` / `--fill` · `.pc-titlebar` · `.pc-button` / `--primary` · `.pc-input` · `.pc-select` · `.pc-textarea` · `.pc-field` · `.pc-field-label` · `.pc-field-error` · `.pc-checkbox` · `.pc-radio` · `.pc-badge` / `--error` / `--warning` / `--success` / `--info` · `.pc-toast` · `.pc-tabs` · `.pc-tab-list` · `.pc-tab` · `.pc-tab-panel` · `.pc-progress` / `--blocks` · `.pc-taskbar` · `.pc-overlay` · `.pc-menu` · `.pc-group` · `.pc-statusbar` · `.pc-bevel-outset` / `--inset` · `.pc-link` · `.pc-sr-only` · `.pc-theme-light` / `.pc-theme-dark` / `.pc-theme-system`
 
-## React components
+## Themes & Accessibility
+
+- **WCAG AA Conformance:** Titlebars and interactive states meet WCAG AA contrast (≥ 4.5:1 for normal text). Focus rings use `:focus-visible` with a customizable dotted outline.
+- **Dark Mode:** Set `data-pc-theme="dark"` (or class `.pc-theme-dark`) on `<html>`, `<body>`, or `<Desktop theme="dark">` for Night Win9x dark mode. Use `system` to follow `prefers-color-scheme`.
+- **Terminal Windows:** `.pc-window--dark` renders a dark terminal-style window.
+- **Overlay:** `.pc-overlay` is presentational backdrop chrome; consumers own focus trapping and escape handling for accessible dialogs.
+
+## React
 
 ```tsx
 import "@miquelt9/pc-ui/pc-ui.css";
 import {
-  Button,
   Desktop,
   Workspace,
   Split,
   Window,
-  TitleBar,
+  Button,
   Input,
   Select,
   TextArea,
+  Field,
+  Checkbox,
+  Radio,
+  Badge,
+  Toast,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanel,
+  Progress,
   Taskbar,
+  Overlay,
+  Menu,
+  MenuItem,
+  Group,
+  StatusBar,
 } from "@miquelt9/pc-ui";
-
-export function Example() {
-  return (
-    <Desktop tiled>
-      <Workspace>
-        <Split direction="row">
-          <Window fill title="Editor" grow={2}>
-            <p>Welcome to pc-ui</p>
-            <Button variant="primary">OK</Button>
-            <Input placeholder="Type something..." />
-          </Window>
-          <Split direction="col" grow={1}>
-            <Window fill title="Preview">…</Window>
-            <Window fill title="Terminal" variant="dark">…</Window>
-          </Split>
-        </Split>
-      </Workspace>
-      <Taskbar>
-        <button type="button" className="pc-button pc-start-btn">
-          Start
-        </button>
-        <div className="pc-taskbar-clock">12:00 PM</div>
-      </Taskbar>
-    </Desktop>
-  );
-}
 ```
 
-| Component | Notes |
-| --- | --- |
-| `Desktop` | `tiled` → workspace fills viewport above taskbar |
-| `Workspace` | Flex root for splits / fill windows |
-| `Split` | `direction`: `row` \| `col`; optional `grow` |
-| `Button` | `variant`: `default` \| `primary`; `active` pressed look |
-| `TitleBar` | `title`, `icon`, `variant`, `onMinimize` / `onMaximize` / `onClose`, `controls` |
-| `Window` | `fill` + `grow` for tiles; `contentVariant`: `default` \| `plain` |
-| `Input` / `Select` / `TextArea` | Native elements + `.pc-*` classes |
-| `Taskbar` | `<footer className="pc-taskbar">` |
+`Desktop tiled` + `Split` + `Window fill` for multi-pane layouts. `Overlay` wraps a `Window` for dialogs.
 
-Presentational only. Tiling is layout CSS — no drag, resize handles, or i3 keybinds.
-
-## Develop this package
+## Develop
 
 ```bash
 npm install
-npm run build   # bundles src/pc-ui.css then tsc → dist/
+npm run build
 ```
 
-Commit `src/pc-ui.css` so vanilla sites can copy it without Node. Do not commit `dist/` — React consumers get it via `prepare` on `npm install`.
-
-## License
-
-Personal / project use under [miquelt9/pc-ui](https://github.com/miquelt9/pc-ui).
+Commit `src/pc-ui.css`. Do not commit `dist/`.

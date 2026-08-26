@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>pc-ui Kitchen Sink Demo</title>
+  <link rel="stylesheet" href="../src/pc-ui.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    .demo-container {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .demo-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+    }
+  </style>
+</head>
+<body class="pc-desktop">
+  <div class="demo-container">
+    <header style="margin-bottom: 8px;">
+      <h1 style="margin: 0 0 4px; font-size: 1.5rem;">pc-ui Kitchen Sink</h1>
+      <p style="margin: 0; font-size: 0.875rem; color: var(--pc-text-muted);">
+        Windows 9x presentational design system preview — WCAG AA contrast, focus rings, semantic tokens, and base primitives.
+      </p>
+    </header>
+
+    <div class="demo-grid">
+      <!-- Standard Window with Form Controls -->
+      <div class="pc-window" style="min-width: 320px;">
+        <div class="pc-titlebar">
+          <div class="pc-titlebar-title">
+            <span>💻</span> Form Controls & Error States
+          </div>
+          <div class="pc-titlebar-controls">
+            <button type="button" class="pc-titlebar-btn" aria-label="Minimize">_</button>
+            <button type="button" class="pc-titlebar-btn" aria-label="Maximize">□</button>
+            <button type="button" class="pc-titlebar-btn" aria-label="Close">X</button>
+          </div>
+        </div>
+        <div class="pc-window-content">
+          <div class="pc-field">
+            <label class="pc-field-label" for="username">Username (Default)</label>
+            <input class="pc-input" id="username" type="text" placeholder="Enter username..." value="retro_user">
+          </div>
+
+          <div class="pc-field">
+            <label class="pc-field-label" for="email-err">Email (Error State)</label>
+            <input class="pc-input pc-input--error" id="email-err" aria-invalid="true" type="email" value="invalid-email@">
+            <span class="pc-field-error" role="alert">Please enter a valid email address.</span>
+          </div>
+
+          <div class="pc-field">
+            <label class="pc-field-label" for="role-select">Role (Disabled State)</label>
+            <select class="pc-select" id="role-select" disabled>
+              <option>Administrator</option>
+              <option>Power User</option>
+            </select>
+          </div>
+
+          <fieldset class="pc-group">
+            <legend>Options</legend>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <label class="pc-checkbox">
+                <input type="checkbox" checked>
+                <span>Enable Sound FX</span>
+              </label>
+              <label class="pc-checkbox">
+                <input type="checkbox">
+                <span>Start Minimized</span>
+              </label>
+              <label class="pc-checkbox">
+                <input type="checkbox" disabled>
+                <span>Hardware Acceleration (Disabled)</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="pc-group" style="margin-top: 12px;">
+            <legend>Mode</legend>
+            <div style="display: flex; gap: 12px;">
+              <label class="pc-radio">
+                <input type="radio" name="mode" value="auto" checked>
+                <span>Auto</span>
+              </label>
+              <label class="pc-radio">
+                <input type="radio" name="mode" value="manual">
+                <span>Manual</span>
+              </label>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <!-- Buttons, Badges, Tabs & Progress -->
+      <div class="pc-window" style="min-width: 320px;">
+        <div class="pc-titlebar">
+          <div class="pc-titlebar-title">
+            <span>⚙️</span> Interactive Chrome & Badges
+          </div>
+          <div class="pc-titlebar-controls">
+            <button type="button" class="pc-titlebar-btn" aria-label="Close">X</button>
+          </div>
+        </div>
+        <div class="pc-window-content">
+          <div style="margin-bottom: 12px;">
+            <strong style="display: block; margin-bottom: 6px; font-size: 0.875rem;">Buttons</strong>
+            <div class="demo-row">
+              <button type="button" class="pc-button">Default</button>
+              <button type="button" class="pc-button pc-button--primary">Primary (OK)</button>
+              <button type="button" class="pc-button active">Active</button>
+              <button type="button" class="pc-button" disabled>Disabled</button>
+              <button type="button" class="pc-button" aria-busy="true">Loading...</button>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 12px;">
+            <strong style="display: block; margin-bottom: 6px; font-size: 0.875rem;">Semantic Badges</strong>
+            <div class="demo-row">
+              <span class="pc-badge">Default</span>
+              <span class="pc-badge pc-badge--info">Info</span>
+              <span class="pc-badge pc-badge--success">Success</span>
+              <span class="pc-badge pc-badge--warning">Warning</span>
+              <span class="pc-badge pc-badge--error">Error</span>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 12px;">
+            <strong style="display: block; margin-bottom: 6px; font-size: 0.875rem;">Tabs</strong>
+            <div class="pc-tabs">
+              <div class="pc-tab-list" role="tablist">
+                <button type="button" class="pc-tab active" role="tab" aria-selected="true">General</button>
+                <button type="button" class="pc-tab" role="tab" aria-selected="false">Advanced</button>
+                <button type="button" class="pc-tab" role="tab" aria-selected="false" disabled>Network</button>
+              </div>
+              <div class="pc-tab-panel" role="tabpanel">
+                <p style="margin: 0 0 8px; font-size: 0.875rem;">General system settings and configuration parameters.</p>
+                <div class="pc-progress pc-progress--blocks" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">
+                  <div class="pc-progress-bar" style="width: 65%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <strong style="display: block; margin-bottom: 6px; font-size: 0.875rem;">Menu Preview</strong>
+            <div class="pc-menu" style="display: inline-block;">
+              <button type="button" class="pc-menu-item">Open File...</button>
+              <button type="button" class="pc-menu-item">Save Configuration</button>
+              <hr class="pc-menu-separator">
+              <button type="button" class="pc-menu-item" disabled>Revert Changes</button>
+              <button type="button" class="pc-menu-item">Exit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Terminal / Dark Window & Toast -->
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div class="pc-window pc-window--dark" style="min-width: 300px;">
+          <div class="pc-titlebar pc-titlebar--dark">
+            <div class="pc-titlebar-title">
+              <span>📟</span> Command Prompt
+            </div>
+            <div class="pc-titlebar-controls">
+              <button type="button" class="pc-titlebar-btn pc-titlebar-btn--dark" aria-label="Close">X</button>
+            </div>
+          </div>
+          <div class="pc-window-content pc-window-content--plain" style="font-family: var(--pc-font-family); font-size: 0.875rem;">
+            <div>Microsoft(R) Windows 95</div>
+            <div>(C)Copyright Microsoft Corp 1981-1996.</div>
+            <br>
+            <div>C:\PC-UI&gt; status --all</div>
+            <div style="color: #34D399;">[OK] All WCAG AA contrast tests passing.</div>
+            <div style="color: #60A5FA;">[OK] Focus-visible rings applied.</div>
+            <div>C:\PC-UI&gt; _</div>
+          </div>
+        </div>
+
+        <div class="pc-toast" role="status">
+          <div class="pc-titlebar">
+            <div class="pc-titlebar-title">
+              <span>🔔</span> System Notification
+            </div>
+            <div class="pc-titlebar-controls">
+              <button type="button" class="pc-titlebar-btn" aria-label="Close">X</button>
+            </div>
+          </div>
+          <div class="pc-toast-body">
+            Settings updated successfully. Your preferences have been saved to disk.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Bar -->
+    <footer class="pc-statusbar" style="margin-top: 16px;">
+      <div class="pc-statusbar-pane">Ready</div>
+      <div class="pc-statusbar-pane" style="max-width: 150px;">Caps: OFF</div>
+      <div class="pc-statusbar-pane" style="max-width: 150px;">Line 1, Col 1</div>
+    </footer>
+  </div>
+</body>
+</html>
