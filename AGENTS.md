@@ -6,17 +6,70 @@ Instructions for AI agents (and humans) wiring this design system into consumer 
 
 Presentational Windows 9x chrome only:
 
-- CSS tokens (`src/tokens.css`)
-- CSS primitives (`.pc-window`, `.pc-button`, `.pc-taskbar`, …)
-- Thin React wrappers (`Button`, `Window`, `TitleBar`, `Input`/`Select`/`TextArea`, `Taskbar`)
+- **CSS** (primary API): tokens + primitives, also as one file `src/pc-ui.css`
+- **Optional React** wrappers for apps that already use React
 
 It does **not** include window dragging, keyboard tiling bindings, z-index managers, routing, or game logic. Consumers keep their own JS/behavior.
 
 It **does** support presentational i3-style tiling: nested horizontal/vertical splits whose leaf windows fill their cells (fullscreen *within the layout*, not browser Fullscreen API).
 
-## Install
+## Two consumer modes
 
-Prefer local while iterating, then GitHub:
+| Consumer | How to use pc-ui | Do NOT add |
+| --- | --- | --- |
+| **Vanilla** (`miquelt9.github.io`) | One CSS `<link>` + `.pc-*` classes / aliases | npm, React, bundlers, `dist/` JS |
+| **React** (`bingo-musical`) | `npm` + CSS import + React components | Window-manager rewrites |
+
+## Vanilla site (`miquelt9.github.io`) — preferred path
+
+The personal site is static HTML/CSS/JS (no build). Treat pc-ui as **plain CSS**.
+
+### Option A — vendor copy (best offline / no CDN)
+
+1. Copy the single stylesheet into the site (no npm):
+
+   ```bash
+   cp ../pc-ui/src/pc-ui.css css/pc-ui.css
+   ```
+
+2. In `index.html` (and other pages), add one link — keep existing scripts as they are:
+
+   ```html
+   <link rel="stylesheet" href="css/pc-ui.css">
+   ```
+
+3. Alias existing site classes onto package classes so HTML/JS stay unchanged:
+
+   ```css
+   /* e.g. in styles/windows.css or a thin aliases.css */
+   .mainbox { /* shared look via vars / same rules as .pc-window */ }
+   .topbar { /* map toward .pc-titlebar */ }
+   .topbarButton { /* map toward .pc-titlebar-btn */ }
+   .taskbar { /* map toward .pc-taskbar */ }
+   ```
+
+   Or gradually add `.pc-window` / `.pc-titlebar` class names alongside old ones.
+
+4. Remove duplicated bevel/titlebar/button rules from site CSS once tokens/primitives cover them.
+5. Leave `windowManager.js` and friends alone — no React.
+
+Re-copy `pc-ui.css` when the design system changes (or add a tiny sync script in the site repo).
+
+### Option B — jsDelivr (no copy step)
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miquelt9/pc-ui@main/src/pc-ui.css">
+```
+
+Pin a tag/commit instead of `@main` for stability when you care.
+
+### What vanilla does NOT need
+
+- `npm install`, `package.json`, Vite/Webpack
+- React / `dist/index.js`
+- The tiling React helpers (`Desktop`, `Split`, …) — use the same CSS classes in HTML if needed
+
+## React app (`bingo-musical`)
 
 ```json
 {
@@ -26,21 +79,23 @@ Prefer local while iterating, then GitHub:
 }
 ```
 
-```json
-{
-  "dependencies": {
-    "@miquelt9/pc-ui": "github:miquelt9/pc-ui"
-  }
-}
+or `"github:miquelt9/pc-ui"`.
+
+```css
+@import "@miquelt9/pc-ui/pc-ui.css";
 ```
 
-CSS is exported from source paths (not `dist`):
+```tsx
+import { Window, Button, Taskbar } from "@miquelt9/pc-ui";
+```
 
-- `@miquelt9/pc-ui/tokens.css`
-- `@miquelt9/pc-ui/primitives.css` (imports tokens)
-- `@miquelt9/pc-ui/style.css` (alias of primitives)
+React is an **optional** peer — only required if you import JS components.
 
-React components come from `@miquelt9/pc-ui` (built `dist/`). **Always import CSS separately** — JS exports do not inject styles.
+CSS exports:
+
+- `@miquelt9/pc-ui/pc-ui.css` — single file (preferred)
+- `@miquelt9/pc-ui/tokens.css` / `primitives.css` — split sources
+- `@miquelt9/pc-ui/style.css` — alias of `pc-ui.css`
 
 ## Visual language (do not reinvent)
 
@@ -56,34 +111,13 @@ React components come from `@miquelt9/pc-ui` (built `dist/`). **Always import CS
 
 Squared corners. No rounded-3xl glass docks, emerald gradients, or purple AI-default themes.
 
-## Wiring: vanilla site (`miquelt9.github.io`)
-
-1. Depend on or vendor `@miquelt9/pc-ui`.
-2. Import primitives once (e.g. in the main stylesheet):
-
-   ```css
-   @import "@miquelt9/pc-ui/primitives.css";
-   ```
-
-3. Keep existing HTML/JS class names (`.mainbox`, `.topbar`, `.topbarButton`, `.taskbar`) by **aliasing** them to package classes instead of rewriting markup:
-
-   ```css
-   .mainbox { /* compose or extend .pc-window rules */ }
-   .topbar { /* map to .pc-titlebar */ }
-   .topbarButton { /* map to .pc-titlebar-btn */ }
-   .taskbar { /* map to .pc-taskbar */ }
-   ```
-
-4. Delete duplicated bevel/titlebar/button rules from the site CSS once aliases use shared tokens.
-5. Leave window-manager JS as-is; do not pull React into the static site unless asked.
-
-## Wiring: React app (`bingo-musical`)
+## Wiring: React app (`bingo-musical`) — continued
 
 1. Install the package (`file:` or `github:`).
 2. In the app entry CSS (e.g. `src/index.css`):
 
    ```css
-   @import "@miquelt9/pc-ui/primitives.css";
+   @import "@miquelt9/pc-ui/pc-ui.css";
    ```
 
 3. Load **Source Code Pro**; drop dark zinc/emerald body chrome for on-screen UI.
@@ -164,8 +198,9 @@ Single maximized pane: one `Window fill` directly inside `Workspace`.
 ## Changing this package
 
 - Prefer CSS tokens + primitives first; keep React wrappers thin (`className` + children).
-- After CSS/TS changes: `npm run build` and bump consumers if they pin a commit.
-- Do not add Tailwind, window managers, or peer deps beyond React unless requested.
+- After CSS/TS source changes: `npm run build` (regenerates `src/pc-ui.css` + `dist/`).
+- Commit the generated `src/pc-ui.css` so vanilla sites can copy/link it without running Node.
+- Do not add Tailwind, window managers, or required peer deps beyond optional React.
 
 ## Verify after wiring
 

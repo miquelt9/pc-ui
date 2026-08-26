@@ -1,7 +1,7 @@
 {
   "name": "@miquelt9/pc-ui",
   "version": "1.1.0",
-  "description": "Retro Windows 9x-style Design System (CSS tokens, primitives, React components)",
+  "description": "Retro Windows 9x-style Design System (CSS tokens, primitives, optional React components)",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -11,20 +11,27 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./pc-ui.css": "./src/pc-ui.css",
     "./tokens.css": "./src/tokens.css",
     "./primitives.css": "./src/primitives.css",
-    "./style.css": "./src/primitives.css"
+    "./style.css": "./src/pc-ui.css"
   },
   "files": [
     "dist",
     "src"
   ],
   "scripts": {
-    "build": "tsc"
+    "bundle:css": "node scripts/bundle-css.mjs",
+    "build": "npm run bundle:css && tsc",
+    "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": { "optional": true },
+    "react-dom": { "optional": true }
   },
   "devDependencies": {
     "@types/react": "^18.3.12",
