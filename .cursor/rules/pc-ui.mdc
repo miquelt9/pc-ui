@@ -9,8 +9,8 @@ This repo is `@miquelt9/pc-ui` — Windows 9x CSS tokens, primitives, and option
 
 Follow [AGENTS.md](../../AGENTS.md):
 
-- **CSS-first.** Vanilla sites (miquelt9.github.io) get one file: `src/pc-ui.css` via `<link>` or a copied `css/pc-ui.css`. No npm/React/bundler on that site.
-- React apps import `@miquelt9/pc-ui/pc-ui.css` plus optional components; React peers are optional.
+- **Two consumers.** github.io = vanilla one-file CSS (`<link>` / copy `src/pc-ui.css`). bingo-musical = Vite/React/Tailwind — `npm` (`file:` or `github:`) + `import "@miquelt9/pc-ui/pc-ui.css"` + React components. Do not vendor CSS into Bingo.
+- GitHub installs rely on `prepare` to build `dist/` (gitignored).
 - After editing `tokens.css` / `primitives.css`, run `npm run build` (regenerates `pc-ui.css`).
 - Keep React wrappers presentational (no drag/window manager keybinds)
 - Preserve visual tokens; do not reinvent colors or bevels

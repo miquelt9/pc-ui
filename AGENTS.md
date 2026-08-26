@@ -69,7 +69,13 @@ Pin a tag/commit instead of `@main` for stability when you care.
 - React / `dist/index.js`
 - The tiling React helpers (`Desktop`, `Split`, …) — use the same CSS classes in HTML if needed
 
-## React app (`bingo-musical`)
+## React app (`bingo-musical`) — npm, not a CSS copy
+
+[bingo-musical](https://github.com/miquelt9/bingo-musical) is a **Vite + React 18 + Tailwind + React Router** SPA (`package.json`, `vite.config.ts`, `src/main.tsx`). Do **not** vendor `pc-ui.css` into `public/` the way github.io does. Install the package and use the React components.
+
+### Install
+
+Sibling checkout (preferred while iterating):
 
 ```json
 {
@@ -79,23 +85,30 @@ Pin a tag/commit instead of `@main` for stability when you care.
 }
 ```
 
-or `"github:miquelt9/pc-ui"`.
+GitHub (CI / deploy). `prepare` runs `tsc` so `dist/` exists even though it is gitignored:
+
+```json
+{
+  "dependencies": {
+    "@miquelt9/pc-ui": "github:miquelt9/pc-ui"
+  }
+}
+```
+
+```tsx
+import "@miquelt9/pc-ui/pc-ui.css";
+import { Window, Button, Taskbar, Desktop } from "@miquelt9/pc-ui";
+```
+
+Or in [`src/index.css`](https://github.com/miquelt9/bingo-musical/blob/main/src/index.css):
 
 ```css
 @import "@miquelt9/pc-ui/pc-ui.css";
 ```
 
-```tsx
-import { Window, Button, Taskbar } from "@miquelt9/pc-ui";
-```
+CSS exports: `pc-ui.css` (preferred), `style.css` (alias), `tokens.css`, `primitives.css`.
 
-React is an **optional** peer — only required if you import JS components.
-
-CSS exports:
-
-- `@miquelt9/pc-ui/pc-ui.css` — single file (preferred)
-- `@miquelt9/pc-ui/tokens.css` / `primitives.css` — split sources
-- `@miquelt9/pc-ui/style.css` — alias of `pc-ui.css`
+React is a peer Bingo already provides (`react` / `react-dom` ^18). Tailwind stays Bingo’s own dependency — do not add it to pc-ui.
 
 ## Visual language (do not reinvent)
 
@@ -111,26 +124,30 @@ CSS exports:
 
 Squared corners. No rounded-3xl glass docks, emerald gradients, or purple AI-default themes.
 
-## Wiring: React app (`bingo-musical`) — continued
+## Wiring: React app (`bingo-musical`) — files to touch
 
-1. Install the package (`file:` or `github:`).
-2. In the app entry CSS (e.g. `src/index.css`):
+Keep routes, deck logic, YouTube player, print CSS, and `jspdf`. Restyle **on-screen chrome only**.
 
-   ```css
-   @import "@miquelt9/pc-ui/pc-ui.css";
+1. [`index.html`](https://github.com/miquelt9/bingo-musical/blob/main/index.html) — Source Code Pro; drop Plus Jakarta / `dark` / zinc body classes.
+2. [`src/index.css`](https://github.com/miquelt9/bingo-musical/blob/main/src/index.css) — `@import "@miquelt9/pc-ui/pc-ui.css"`; keep `@media print` so cards stay white paper.
+3. Optional [`tailwind.config.js`](https://github.com/miquelt9/bingo-musical/blob/main/tailwind.config.js) token bridge (layout utilities only; chrome comes from pc-ui classes):
+
+   ```js
+   colors: {
+     pc: {
+       desktop: "var(--pc-desktop-bg)",
+       chrome: "var(--pc-chrome-bg)",
+       title: "var(--pc-titlebar-bg)",
+     },
+   }
    ```
 
-3. Load **Source Code Pro**; drop dark zinc/emerald body chrome for on-screen UI.
-4. Keep `@media print` / PDF paths clean (white paper cards) — do not wrap printed bingo cards in Win98 chrome.
-5. Optional Tailwind bridge — map tokens in `tailwind.config.js` (e.g. `pc.desktop`, `pc.chrome`, `pc.title`). Tailwind is **not** a package dependency.
-6. Replace chrome with React components where natural:
+4. [`src/components/layout/AppShell.tsx`](https://github.com/miquelt9/bingo-musical/blob/main/src/components/layout/AppShell.tsx) — replace `bg-zinc-950` / glass header with `Desktop` + `Taskbar` (or bevelled top bar) for Decks / Editor / Cards / Host / Settings. Mini-player is a small `Window`, not a glass dock.
+5. Pages (`HomePage`, `EditorPage`, `CardsPage`, `HostPage`, `SettingsPage`) — zinc `rounded-3xl` cards become `Window` + title bar (`_ □ X` as chrome; wire `onClose` only when a modal actually closes).
+6. Shared controls / modals — `Button`, `Input`, `Select`, `TextArea`. Mix Tailwind for spacing/grid (`className="w-full max-w-xl"`) with pc-ui chrome.
+7. `CardPreview` — on-screen preview may sit in a window; printed/PDF cards stay clean paper.
 
-   - Shell / nav → `Taskbar` or bevelled bar + `.pc-button`
-   - Panels / pages → `Window` + title bar (`_ □ X` as chrome; wire `onClose` only when something actually closes)
-   - Controls / modals → `Button`, `Input`, `Select`, `TextArea`
-   - Mini-player → small `Window`, not a glass dock
-
-7. Do **not** make Bingo a full desktop OS (no drag/resize / i3 keybinds unless explicitly requested). Use `Desktop tiled` + `Workspace` + `Split` + `Window fill` when you need multi-pane fullscreen layouts.
+Do **not** turn Bingo into a full desktop OS (no drag/resize / i3 keybinds unless asked). Multi-pane fullscreen: `Desktop tiled` + `Workspace` + `Split` + `Window fill`.
 
 ## Tiling layout (i3-style)
 

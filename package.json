@@ -20,9 +20,13 @@
     "dist",
     "src"
   ],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "scripts": {
     "bundle:css": "node scripts/bundle-css.mjs",
     "build": "npm run bundle:css && tsc",
+    "prepare": "npm run build",
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {

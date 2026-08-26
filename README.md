@@ -28,11 +28,15 @@ Or CDN:
 
 Then use classes like `.pc-window`, `.pc-titlebar`, `.pc-button`, `.pc-taskbar`, or alias your existing `.mainbox` / `.topbar` rules onto the same tokens. Keep your window-manager JS — you do **not** need React or a bundler.
 
-## React / npm apps
+## React / npm apps (bingo-musical)
+
+[bingo-musical](https://github.com/miquelt9/bingo-musical) is Vite + React + Tailwind — install the package, do not copy CSS into `public/`.
 
 ```bash
 npm install github:miquelt9/pc-ui
 ```
+
+That git install runs `prepare` (builds `dist/` — it is not committed). React 18 is already a Bingo dependency; Tailwind stays in Bingo.
 
 ```json
 {
@@ -150,7 +154,7 @@ npm install
 npm run build   # bundles src/pc-ui.css then tsc → dist/
 ```
 
-Commit `src/pc-ui.css` so vanilla sites can copy it without Node.
+Commit `src/pc-ui.css` so vanilla sites can copy it without Node. Do not commit `dist/` — React consumers get it via `prepare` on `npm install`.
 
 ## License
 
