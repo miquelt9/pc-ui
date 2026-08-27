@@ -69,6 +69,13 @@
   /* Overlay / dialogs */
   --pc-overlay-bg: rgba(0, 0, 0, 0.35);
   --pc-overlay-z: 1000;
+  --pc-modal-width: min(420px, calc(100vw - 32px));
+  --pc-modal-icon-size: 32px;
+
+  /* Toast / Notifications */
+  --pc-toast-z: 1100;
+  --pc-toast-offset-x: var(--pc-space-5, 16px);
+  --pc-toast-offset-y: var(--pc-space-5, 16px);
 }
 
 .pc-theme-dark,
@@ -118,6 +125,11 @@
 
   /* Overlay / dialogs */
   --pc-overlay-bg: rgba(0, 0, 0, 0.55);
+
+  /* Toast / Notifications */
+  --pc-toast-z: 1100;
+  --pc-toast-offset-x: var(--pc-space-5, 16px);
+  --pc-toast-offset-y: var(--pc-space-5, 16px);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -168,5 +180,10 @@
 
     /* Overlay / dialogs */
     --pc-overlay-bg: rgba(0, 0, 0, 0.55);
+
+    /* Toast / Notifications */
+    --pc-toast-z: 1100;
+    --pc-toast-offset-x: var(--pc-space-5, 16px);
+    --pc-toast-offset-y: var(--pc-space-5, 16px);
   }
 }

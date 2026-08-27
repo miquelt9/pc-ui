@@ -125,6 +125,7 @@
               <button type="button" class="pc-button active">Active</button>
               <button type="button" class="pc-button" disabled>Disabled</button>
               <button type="button" class="pc-button" aria-busy="true">Loading...</button>
+              <button type="button" class="pc-button" id="notify-btn">Trigger Notification</button>
             </div>
           </div>
 
@@ -166,6 +167,15 @@
               <button type="button" class="pc-menu-item">Exit</button>
             </div>
           </div>
+
+          <div style="margin-top: 12px;">
+            <strong style="display: block; margin-bottom: 6px; font-size: 0.875rem;">Modal Triggers</strong>
+            <div class="demo-row">
+              <button type="button" class="pc-button" data-modal-open="modal-default">Confirm</button>
+              <button type="button" class="pc-button" data-modal-open="modal-warning">Privileged Action</button>
+              <button type="button" class="pc-button pc-button--primary" data-modal-open="modal-danger">Delete</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -202,6 +212,10 @@
           </div>
           <div class="pc-toast-body">
             Settings updated successfully. Your preferences have been saved to disk.
+            <div class="pc-toast-actions">
+              <button type="button" class="pc-button">Undo</button>
+              <button type="button" class="pc-button pc-button--primary">OK</button>
+            </div>
           </div>
         </div>
       </div>
@@ -214,5 +228,172 @@
       <div class="pc-statusbar-pane" style="max-width: 150px;">Line 1, Col 1</div>
     </footer>
   </div>
+
+  <!-- Default confirmation -->
+  <div class="pc-overlay pc-overlay--modal" id="modal-default" hidden>
+    <div class="pc-window pc-window--modal" role="dialog" aria-modal="true" aria-labelledby="modal-default-title">
+      <div class="pc-titlebar">
+        <div class="pc-titlebar-title" id="modal-default-title">Save Changes</div>
+        <div class="pc-titlebar-controls">
+          <button type="button" class="pc-titlebar-btn" aria-label="Close" data-modal-close>×</button>
+        </div>
+      </div>
+      <div class="pc-window-content">
+        <div class="pc-modal-body">
+          <p style="margin: 0;">Save your changes before closing this window?</p>
+        </div>
+        <div class="pc-modal-actions">
+          <button type="button" class="pc-button pc-button--primary" data-modal-close>OK</button>
+          <button type="button" class="pc-button" data-modal-close>Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Privileged / warning -->
+  <div class="pc-overlay pc-overlay--modal" id="modal-warning" hidden>
+    <div class="pc-window pc-window--modal pc-window--modal-warning" role="alertdialog" aria-modal="true" aria-labelledby="modal-warning-title">
+      <div class="pc-titlebar">
+        <div class="pc-titlebar-title" id="modal-warning-title">Administrator Privileges Required</div>
+        <div class="pc-titlebar-controls">
+          <button type="button" class="pc-titlebar-btn" aria-label="Close" data-modal-close>×</button>
+        </div>
+      </div>
+      <div class="pc-window-content">
+        <div class="pc-modal-icon pc-modal-icon--warning" aria-hidden="true">!</div>
+        <div class="pc-modal-body">
+          <p style="margin: 0;">This action requires administrator privileges. Are you sure you want to continue?</p>
+        </div>
+        <div class="pc-modal-actions">
+          <button type="button" class="pc-button pc-button--primary" data-modal-close>Continue</button>
+          <button type="button" class="pc-button" data-modal-close>Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dangerous action -->
+  <div class="pc-overlay pc-overlay--modal" id="modal-danger" hidden>
+    <div class="pc-window pc-window--modal pc-window--modal-danger" role="alertdialog" aria-modal="true" aria-labelledby="modal-danger-title">
+      <div class="pc-titlebar">
+        <div class="pc-titlebar-title" id="modal-danger-title">Confirm Delete</div>
+        <div class="pc-titlebar-controls">
+          <button type="button" class="pc-titlebar-btn" aria-label="Close" data-modal-close>×</button>
+        </div>
+      </div>
+      <div class="pc-window-content">
+        <div class="pc-modal-icon pc-modal-icon--danger" aria-hidden="true">⚠</div>
+        <div class="pc-modal-body">
+          <p style="margin: 0;"><strong>This cannot be undone.</strong> Permanently delete <code>system32.dll</code>?</p>
+        </div>
+        <div class="pc-modal-actions">
+          <button type="button" class="pc-button pc-button--primary" data-modal-close>Delete</button>
+          <button type="button" class="pc-button" data-modal-close>Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function closeModal(overlay) {
+      overlay.hidden = true;
+      document.body.style.overflow = "";
+    }
+
+    function openModal(id) {
+      const overlay = document.getElementById(id);
+      if (!overlay) return;
+      overlay.hidden = false;
+      document.body.style.overflow = "hidden";
+      const focusable = overlay.querySelector(".pc-button, .pc-titlebar-btn");
+      focusable?.focus();
+    }
+
+    document.querySelectorAll("[data-modal-open]").forEach((btn) => {
+      btn.addEventListener("click", () => openModal(btn.getAttribute("data-modal-open")));
+    });
+
+    document.querySelectorAll(".pc-overlay--modal").forEach((overlay) => {
+      overlay.addEventListener("click", (event) => {
+        if (event.target === overlay) closeModal(overlay);
+      });
+      overlay.querySelectorAll("[data-modal-close]").forEach((btn) => {
+        btn.addEventListener("click", () => closeModal(overlay));
+      });
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      const open = document.querySelector(".pc-overlay--modal:not([hidden])");
+      if (open) closeModal(open);
+    });
+  </script>
+
+  <!-- Bottom-Right Desktop Notifications Container -->
+  <div class="pc-toast-container pc-toast-container--bottom-right" id="notification-area" aria-live="polite"></div>
+
+  <script>
+    let notificationCount = 0;
+    const notifyBtn = document.getElementById("notify-btn");
+    const container = document.getElementById("notification-area");
+
+    if (notifyBtn && container) {
+      notifyBtn.addEventListener("click", () => {
+        notificationCount++;
+        const toast = document.createElement("div");
+        toast.className = "pc-toast";
+        toast.setAttribute("role", "status");
+        
+        toast.innerHTML = `
+          <div class="pc-titlebar">
+            <div class="pc-titlebar-title">
+              <span>🔔</span> Notification #${notificationCount}
+            </div>
+            <div class="pc-titlebar-controls">
+              <button type="button" class="pc-titlebar-btn" aria-label="Close">X</button>
+            </div>
+          </div>
+          <div class="pc-toast-body">
+            Desktop event #${notificationCount} received. Disappearing automatically in 8s...
+            <div class="pc-toast-actions">
+              <button type="button" class="pc-button" data-action="view">View</button>
+              <button type="button" class="pc-button pc-button--primary" data-action="dismiss">Dismiss</button>
+            </div>
+          </div>
+        `;
+
+        const closeBtn = toast.querySelector(".pc-titlebar-btn");
+        const viewBtn = toast.querySelector('[data-action="view"]');
+        const dismissBtn = toast.querySelector('[data-action="dismiss"]');
+        let timer = null;
+
+        const removeToast = () => {
+          if (timer) clearTimeout(timer);
+          toast.remove();
+        };
+
+        if (closeBtn) {
+          closeBtn.addEventListener("click", removeToast);
+        }
+
+        if (viewBtn) {
+          viewBtn.addEventListener("click", () => {
+            const pane = document.querySelector(".pc-statusbar-pane");
+            if (pane) pane.textContent = `Viewed notification #${notificationCount}`;
+            removeToast();
+          });
+        }
+
+        if (dismissBtn) {
+          dismissBtn.addEventListener("click", removeToast);
+        }
+
+        container.appendChild(toast);
+
+        // Auto-dismiss after 8000ms (longer when actions are present)
+        timer = setTimeout(removeToast, 8000);
+      });
+    }
+  </script>
 </body>
 </html>

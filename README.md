@@ -53,11 +53,11 @@ React is an optional peer. Theme by overriding CSS variables; mix consumer layou
 - **Bevels:** `--pc-bevel-light`, `--pc-bevel-dark`, `--pc-bevel-shadow`, `--pc-bevel-inset-shadow`
 - **Typography & Scale:** `--pc-font-family`, `--pc-font-sans`, `--pc-font-size-xs`, `--pc-font-size-sm`, `--pc-font-size-md`, `--pc-line-height-tight`, `--pc-line-height-body`
 - **Spacing (2px grid):** `--pc-space-1` (2px), `--pc-space-2` (4px), `--pc-space-3` (8px), `--pc-space-4` (12px), `--pc-space-5` (16px)
-- **Layout & Overlay:** `--pc-tile-gap`, `--pc-tile-grow`, `--pc-overlay-bg`, `--pc-overlay-z`
+- **Layout & Overlay:** `--pc-tile-gap`, `--pc-tile-grow`, `--pc-overlay-bg`, `--pc-overlay-z`, `--pc-toast-z`, `--pc-toast-offset-x`, `--pc-toast-offset-y`
 
 ### Classes
 
-`.pc-desktop` / `--tiled` · `.pc-workspace` · `.pc-split--row` / `--col` · `.pc-window` / `--dark` / `--fill` · `.pc-titlebar` · `.pc-button` / `--primary` · `.pc-input` · `.pc-select` · `.pc-textarea` · `.pc-field` · `.pc-field-label` · `.pc-field-error` · `.pc-checkbox` · `.pc-radio` · `.pc-badge` / `--error` / `--warning` / `--success` / `--info` · `.pc-toast` · `.pc-tabs` · `.pc-tab-list` · `.pc-tab` · `.pc-tab-panel` · `.pc-progress` / `--blocks` · `.pc-taskbar` · `.pc-overlay` · `.pc-menu` · `.pc-group` · `.pc-statusbar` · `.pc-bevel-outset` / `--inset` · `.pc-link` · `.pc-sr-only` · `.pc-theme-light` / `.pc-theme-dark` / `.pc-theme-system`
+`.pc-desktop` / `--tiled` · `.pc-workspace` · `.pc-split--row` / `--col` · `.pc-window` / `--dark` / `--fill` · `.pc-titlebar` · `.pc-button` / `--primary` · `.pc-input` · `.pc-select` · `.pc-textarea` · `.pc-field` · `.pc-field-label` · `.pc-field-error` · `.pc-checkbox` · `.pc-radio` · `.pc-badge` / `--error` / `--warning` / `--success` / `--info` · `.pc-toast` · `.pc-toast-actions` · `.pc-toast-container` / `--bottom-right` / `--bottom-left` / `--top-right` / `--top-left` · `.pc-tabs` · `.pc-tab-list` · `.pc-tab` · `.pc-tab-panel` · `.pc-progress` / `--blocks` · `.pc-taskbar` · `.pc-overlay` · `.pc-menu` · `.pc-group` · `.pc-statusbar` · `.pc-bevel-outset` / `--inset` · `.pc-link` · `.pc-sr-only` · `.pc-theme-light` / `.pc-theme-dark` / `.pc-theme-system`
 
 ## Themes & Accessibility
 
@@ -84,6 +84,8 @@ import {
   Radio,
   Badge,
   Toast,
+  ToastContainer,
+  ToastActions,
   Tabs,
   TabList,
   Tab,

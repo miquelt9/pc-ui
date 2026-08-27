@@ -7,6 +7,7 @@ export * from "./react/Desktop";
 export * from "./react/Workspace";
 export * from "./react/Split";
 export * from "./react/Overlay";
+export * from "./react/Modal";
 export * from "./react/Menu";
 export * from "./react/Group";
 export * from "./react/StatusBar";
