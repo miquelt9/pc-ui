@@ -212,10 +212,11 @@
           </div>
           <div class="pc-toast-body">
             Settings updated successfully. Your preferences have been saved to disk.
-            <div class="pc-toast-actions">
-              <button type="button" class="pc-button">Undo</button>
-              <button type="button" class="pc-button pc-button--primary">OK</button>
-            </div>
+          </div>
+          <div class="pc-toast-actions">
+            <button type="button" class="pc-button">Details</button>
+            <button type="button" class="pc-button">Undo</button>
+            <button type="button" class="pc-button pc-button--primary">OK</button>
           </div>
         </div>
       </div>
@@ -355,14 +356,16 @@
           </div>
           <div class="pc-toast-body">
             Desktop event #${notificationCount} received. Disappearing automatically in 8s...
-            <div class="pc-toast-actions">
-              <button type="button" class="pc-button" data-action="view">View</button>
-              <button type="button" class="pc-button pc-button--primary" data-action="dismiss">Dismiss</button>
-            </div>
+          </div>
+          <div class="pc-toast-actions">
+            <button type="button" class="pc-button" data-action="snooze">Snooze</button>
+            <button type="button" class="pc-button" data-action="view">View</button>
+            <button type="button" class="pc-button pc-button--primary" data-action="dismiss">Dismiss</button>
           </div>
         `;
 
         const closeBtn = toast.querySelector(".pc-titlebar-btn");
+        const snoozeBtn = toast.querySelector('[data-action="snooze"]');
         const viewBtn = toast.querySelector('[data-action="view"]');
         const dismissBtn = toast.querySelector('[data-action="dismiss"]');
         let timer = null;
@@ -374,6 +377,15 @@
 
         if (closeBtn) {
           closeBtn.addEventListener("click", removeToast);
+        }
+
+        if (snoozeBtn) {
+          snoozeBtn.addEventListener("click", () => {
+            const pane = document.querySelector(".pc-statusbar-pane");
+            if (pane) pane.textContent = `Snoozed notification #${notificationCount}`;
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(removeToast, 8000);
+          });
         }
 
         if (viewBtn) {

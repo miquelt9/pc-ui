@@ -120,7 +120,7 @@ CSS: `.pc-desktop--tiled`, `.pc-workspace`, `.pc-split--row` / `--col`, `.pc-win
 | Fields | `<Input>` `<Select>` `<TextArea>` `<Field>` |
 | Checkbox / Radio | `<Checkbox>` `<Radio>` / `.pc-checkbox` / `.pc-radio` |
 | Badge | `<Badge>` / `.pc-badge` / `--error` `--warning` `--success` `--info` |
-| Toast / Notification | `<Toast>` / `<ToastContainer>` / `<ToastActions>` / `.pc-toast` / `.pc-toast-actions` / `.pc-toast-container` / `--bottom-right` `--bottom-left` `--top-right` `--top-left` |
+| Toast / Notification | `<Toast>` / `<ToastContainer>` / `<ToastActions>` / `.pc-toast` / `.pc-toast-actions` (footer or inline) / `.pc-toast-container` / `--bottom-right` `--bottom-left` `--top-right` `--top-left` |
 | Tabs | `<Tabs>` `<TabList>` `<Tab>` `<TabPanel>` / `.pc-tabs` |
 | Progress bar | `<Progress>` / `.pc-progress` / `--blocks` |
 | Taskbar | `<Taskbar>` / `.pc-taskbar` |

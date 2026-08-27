@@ -583,8 +583,24 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
+  align-items: center;
   gap: var(--pc-space-2, 4px);
+}
+
+/* Footer action bar at the bottom of the toast */
+.pc-toast > .pc-toast-actions {
+  padding: var(--pc-space-2, 4px) var(--pc-space-3, 8px);
+  background-color: var(--pc-window-body-bg);
+  border-top: solid 1px var(--pc-bevel-dark);
+  border-left: solid 1px var(--pc-bevel-dark);
+  border-bottom: solid 1px var(--pc-bevel-light);
+  border-right: solid 1px var(--pc-bevel-light);
+}
+
+/* Inline actions inside the message body */
+.pc-toast-body > .pc-toast-actions {
   margin-top: var(--pc-space-3, 8px);
+  gap: var(--pc-space-3, 8px);
 }
 
 /* Tabs */
