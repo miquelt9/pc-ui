@@ -32,7 +32,8 @@
     "bundle:css": "node scripts/bundle-css.mjs",
     "build": "npm run bundle:css && tsc",
     "prepare": "npm run build",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "test": "vitest run"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
@@ -45,6 +46,9 @@
   "devDependencies": {
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "typescript": "^5.7.2"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.7.2",
+    "vitest": "^5.0.2"
   }
 }
