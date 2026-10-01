@@ -49,11 +49,13 @@ React is an optional peer. Theme by overriding CSS variables; mix consumer layou
 
 - **Colors:** `--pc-desktop-bg`, `--pc-chrome-bg`, `--pc-chrome-dark`, `--pc-window-body-bg`, `--pc-titlebar-bg`, `--pc-titlebar-text`, `--pc-terminal-bg`, `--pc-terminal-titlebar`, `--pc-terminal-text`, `--pc-text-main`, `--pc-text-muted`, `--pc-link`, `--pc-link-visited`, `--pc-link-active`
 - **Semantic Feedback:** `--pc-color-error`, `--pc-color-error-bg`, `--pc-color-warning`, `--pc-color-warning-bg`, `--pc-color-success`, `--pc-color-success-bg`, `--pc-color-info`, `--pc-color-info-bg`
-- **Interactive & Focus:** `--pc-button-hover-bg`, `--pc-button-active-bg`, `--pc-input-bg`, `--pc-focus-ring`, `--pc-focus-ring-offset`
+- **Interactive & Focus:** `--pc-button-hover-bg`, `--pc-button-active-bg`, `--pc-input-bg`, `--pc-titlebar-btn-fg`, `--pc-titlebar-btn-fg-dark`, `--pc-focus-ring`, `--pc-focus-ring-offset`
 - **Bevels:** `--pc-bevel-light`, `--pc-bevel-dark`, `--pc-bevel-shadow`, `--pc-bevel-inset-shadow`
 - **Typography & Scale:** `--pc-font-family`, `--pc-font-sans`, `--pc-font-size-xs`, `--pc-font-size-sm`, `--pc-font-size-md`, `--pc-line-height-tight`, `--pc-line-height-body`
 - **Spacing (2px grid):** `--pc-space-1` (2px), `--pc-space-2` (4px), `--pc-space-3` (8px), `--pc-space-4` (12px), `--pc-space-5` (16px)
-- **Layout & Overlay:** `--pc-tile-gap`, `--pc-tile-grow`, `--pc-overlay-bg`, `--pc-overlay-z`, `--pc-toast-z`, `--pc-toast-offset-x`, `--pc-toast-offset-y`
+- **Layout & Overlay:** `--pc-tile-gap`, `--pc-tile-grow`, `--pc-overlay-bg`, `--pc-overlay-z`, `--pc-modal-width`, `--pc-modal-icon-size`, `--pc-toast-z`, `--pc-toast-offset-x`, `--pc-toast-offset-y`
+
+Title-bar blue is `--pc-titlebar-bg`: `#1E5AA8` on the light theme, `#2B6CB0` on dark (and on `system` when the OS prefers dark). Caption text is `--pc-titlebar-text` (`#FFFFFF`). Terminal panes use `--pc-terminal-titlebar` (`#2C2C2C`). Names and theme values: [.agents/tokens.md](./.agents/tokens.md).
 
 ### Classes
 
