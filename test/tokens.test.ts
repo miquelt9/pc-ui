@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { repoRoot } from "./repo-root.ts";
@@ -6,60 +6,66 @@ import { repoRoot } from "./repo-root.ts";
 const tokens = readFileSync(join(repoRoot, "src/tokens.css"), "utf8");
 const primitives = readFileSync(join(repoRoot, "src/primitives.css"), "utf8");
 const bundle = readFileSync(join(repoRoot, "src/pc-ui.css"), "utf8");
+const tokenDoc = readFileSync(join(repoRoot, ".agents/tokens.md"), "utf8");
 
-/** Public custom properties documented for theming. */
-const publicTokens = [
-  "--pc-desktop-bg",
-  "--pc-chrome-bg",
-  "--pc-chrome-dark",
-  "--pc-window-body-bg",
-  "--pc-titlebar-bg",
-  "--pc-titlebar-text",
-  "--pc-terminal-bg",
-  "--pc-terminal-titlebar",
-  "--pc-terminal-text",
-  "--pc-text-main",
-  "--pc-text-muted",
-  "--pc-link",
-  "--pc-link-visited",
-  "--pc-link-active",
-  "--pc-color-error",
-  "--pc-color-error-bg",
-  "--pc-color-warning",
-  "--pc-color-warning-bg",
-  "--pc-color-success",
-  "--pc-color-success-bg",
-  "--pc-color-info",
-  "--pc-color-info-bg",
-  "--pc-button-hover-bg",
-  "--pc-button-active-bg",
-  "--pc-input-bg",
-  "--pc-focus-ring",
-  "--pc-focus-ring-offset",
-  "--pc-bevel-light",
-  "--pc-bevel-dark",
-  "--pc-bevel-shadow",
-  "--pc-bevel-inset-shadow",
-  "--pc-font-family",
-  "--pc-font-sans",
-  "--pc-font-size-xs",
-  "--pc-font-size-sm",
-  "--pc-font-size-md",
-  "--pc-line-height-tight",
-  "--pc-line-height-body",
-  "--pc-space-1",
-  "--pc-space-2",
-  "--pc-space-3",
-  "--pc-space-4",
-  "--pc-space-5",
-  "--pc-tile-gap",
-  "--pc-tile-grow",
-  "--pc-overlay-bg",
-  "--pc-overlay-z",
-  "--pc-toast-z",
-  "--pc-toast-offset-x",
-  "--pc-toast-offset-y",
-];
+/** Title-bar blue (`--pc-titlebar-bg`) as defined for each theme. */
+const titlebarBlue = {
+  light: "#1E5AA8",
+  dark: "#2B6CB0",
+} as const;
+
+function customProperties(css: string): string[] {
+  return [...css.matchAll(/(--pc-[a-z0-9-]+)\s*:/g)].map((match) => match[1]);
+}
+
+function definedTokens(css: string): Set<string> {
+  return new Set(customProperties(css));
+}
+
+/** `--pc-*` names, including a trailing `*` prefix wildcard such as `--pc-font-size-*`. */
+function tokenRefs(text: string): string[] {
+  return [...text.matchAll(/--pc-[a-z0-9-]+\*?/g)].map((match) => match[0]);
+}
+
+function catalogTokens(markdown: string): string[] {
+  const catalog = markdown.split("## Catalog")[1];
+  expect(catalog, "tokens.md catalog section").toBeTruthy();
+  return tokenRefs(catalog).filter((name) => !name.endsWith("*"));
+}
+
+function commentsOnly(source: string): string {
+  const blocks = [...source.matchAll(/\/\*[\s\S]*?\*\//g)].map((match) => match[0]);
+  const lines = [...source.matchAll(/(^|[^:])\/\/(.*)$/gm)].map((match) => match[2]);
+  return [...blocks, ...lines].join("\n");
+}
+
+function walk(dir: string, acc: string[] = []): string[] {
+  for (const name of readdirSync(dir)) {
+    const path = join(dir, name);
+    if (statSync(path).isDirectory()) walk(path, acc);
+    else acc.push(path);
+  }
+  return acc;
+}
+
+function expectKnownToken(name: string, defined: Set<string>): void {
+  if (name.endsWith("*")) {
+    const prefix = name.slice(0, -1);
+    const matches = [...defined].filter((token) => token.startsWith(prefix));
+    expect(matches, name).not.toEqual([]);
+    return;
+  }
+  expect(defined.has(name), name).toBe(true);
+}
+
+function assignment(css: string, header: string, name: string): string {
+  const start = css.indexOf(header);
+  expect(start, header).toBeGreaterThanOrEqual(0);
+  const slice = css.slice(start);
+  const match = slice.match(new RegExp(`${name}\\s*:\\s*([^;]+);`));
+  expect(match, `${header} ${name}`).toBeTruthy();
+  return match![1].trim();
+}
 
 const themeSelectors = [
   ".pc-theme-light",
@@ -70,14 +76,48 @@ const themeSelectors = [
   '[data-pc-theme="system"]',
 ];
 
-function customProperties(css: string): string[] {
-  return [...css.matchAll(/(--pc-[a-z0-9-]+)\s*:/g)].map((match) => match[1]);
-}
+const docFiles = ["README.md", "AGENTS.md", ".agents/tokens.md", ".agents/testing.md"];
 
 describe("CSS tokens", () => {
-  it("defines the documented token names", () => {
-    for (const name of publicTokens) {
-      expect(tokens, name).toContain(`${name}:`);
+  it("matches the documented catalog to every token in tokens.css", () => {
+    const defined = [...definedTokens(tokens)].sort();
+    const catalog = catalogTokens(tokenDoc);
+    expect(catalog).toEqual([...new Set(catalog)]);
+    expect([...catalog].sort()).toEqual(defined);
+  });
+
+  it("only cites real token names from docs and comments", () => {
+    const defined = definedTokens(tokens);
+    const sources = [
+      ...docFiles.map((file) => readFileSync(join(repoRoot, file), "utf8")),
+      ...walk(join(repoRoot, "src"))
+        .filter((file) => /\.(css|ts|tsx)$/.test(file) && !file.endsWith("pc-ui.css"))
+        .map((file) => commentsOnly(readFileSync(file, "utf8"))),
+      ...walk(join(repoRoot, "test")).map((file) => readFileSync(file, "utf8")),
+      ...walk(join(repoRoot, "scripts")).map((file) => commentsOnly(readFileSync(file, "utf8"))),
+    ];
+
+    for (const name of sources.flatMap(tokenRefs)) {
+      expectKnownToken(name, defined);
+    }
+  });
+
+  it("documents the title-bar blue on --pc-titlebar-bg", () => {
+    expect(assignment(tokens, ":root", "--pc-titlebar-bg").toLowerCase()).toBe(
+      titlebarBlue.light.toLowerCase()
+    );
+    expect(assignment(tokens, ".pc-theme-dark", "--pc-titlebar-bg").toLowerCase()).toBe(
+      titlebarBlue.dark.toLowerCase()
+    );
+    expect(assignment(tokens, ".pc-theme-system", "--pc-titlebar-bg").toLowerCase()).toBe(
+      titlebarBlue.dark.toLowerCase()
+    );
+
+    for (const file of ["README.md", "AGENTS.md", ".agents/tokens.md"]) {
+      const text = readFileSync(join(repoRoot, file), "utf8");
+      expect(text, file).toContain("--pc-titlebar-bg");
+      expect(text, file).toContain(titlebarBlue.light);
+      expect(text, file).toContain(titlebarBlue.dark);
     }
   });
 

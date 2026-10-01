@@ -61,10 +61,10 @@ Preserve tokens; do not invent rounded glass, gradients, or unrelated palettes.
 | --- | --- |
 | Desktop | `--pc-desktop-bg` |
 | Chrome / bars | `--pc-chrome-bg` |
-| Title bar | `--pc-titlebar-bg` / `--pc-titlebar-text` |
-| Dark / terminal | `--pc-terminal-bg` / `--pc-terminal-titlebar` |
+| Title bar | `--pc-titlebar-bg` (`#1E5AA8` light, `#2B6CB0` dark) / `--pc-titlebar-text` |
+| Dark / terminal | `--pc-terminal-bg` / `--pc-terminal-titlebar` (`#2C2C2C`) |
 | Bevel | `--pc-bevel-light`, `--pc-bevel-dark`, `--pc-bevel-shadow`, `--pc-bevel-inset-shadow` |
-| Font & Scales | `--pc-font-family`, `--pc-font-size-*`, `--pc-space-*` |
+| Font & Scales | `--pc-font-family`, `--pc-font-sans`, `--pc-font-size-xs`, `--pc-font-size-sm`, `--pc-font-size-md`, `--pc-space-1` … `--pc-space-5` |
 | Links | `--pc-link`, `--pc-link-visited`, `--pc-link-active` |
 | Feedback | `--pc-color-error`, `--pc-color-warning`, `--pc-color-success`, `--pc-color-info` |
 | Buttons / Inputs | `--pc-button-hover-bg`, `--pc-button-active-bg`, `--pc-input-bg`, `--pc-focus-ring` |
@@ -73,7 +73,7 @@ Squared corners. Override `:root` (or a wrapper) to theme without forking.
 
 ## Themes / Dark mode
 
-Night Win9x theme: deep teal desktop, charcoal chrome, blue title bars. Activated by class or `data-pc-theme` attribute (or React `<Desktop theme="...">`). Default is light; `system` follows `prefers-color-scheme`.
+Night Win9x theme: deep teal desktop, charcoal chrome, title bars in the title-bar blue `--pc-titlebar-bg` (`#2B6CB0`; light theme uses the same token at `#1E5AA8`). Activated by class or `data-pc-theme` attribute (or React `<Desktop theme="...">`). Default is light; `system` follows `prefers-color-scheme`. Token names: [.agents/tokens.md](./.agents/tokens.md).
 
 | Theme | CSS class | Attribute | React |
 | --- | --- | --- | --- |
