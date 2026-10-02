@@ -59,7 +59,7 @@ Title-bar blue is `--pc-titlebar-bg`: `#1E5AA8` on the light theme, `#2B6CB0` on
 
 ### Classes
 
-`.pc-desktop` / `--tiled` · `.pc-workspace` · `.pc-split--row` / `--col` · `.pc-window` / `--dark` / `--fill` · `.pc-titlebar` · `.pc-button` / `--primary` · `.pc-input` · `.pc-select` · `.pc-textarea` · `.pc-field` · `.pc-field-label` · `.pc-field-error` · `.pc-checkbox` · `.pc-radio` · `.pc-badge` / `--error` / `--warning` / `--success` / `--info` · `.pc-toast` · `.pc-toast-actions` · `.pc-toast-container` / `--bottom-right` / `--bottom-left` / `--top-right` / `--top-left` · `.pc-tabs` · `.pc-tab-list` · `.pc-tab` · `.pc-tab-panel` · `.pc-progress` / `--blocks` · `.pc-taskbar` · `.pc-overlay` · `.pc-menu` · `.pc-group` · `.pc-statusbar` · `.pc-bevel-outset` / `--inset` · `.pc-link` · `.pc-sr-only` · `.pc-theme-light` / `.pc-theme-dark` / `.pc-theme-system`
+`.pc-desktop` / `--tiled` · `.pc-workspace` · `.pc-split--row` / `--col` · `.pc-window` / `--dark` / `--fill` / `--freeform` · `.pc-titlebar` · `.pc-button` / `--primary` · `.pc-input` · `.pc-select` · `.pc-textarea` · `.pc-field` · `.pc-field-label` · `.pc-field-error` · `.pc-checkbox` · `.pc-radio` · `.pc-badge` / `--error` / `--warning` / `--success` / `--info` · `.pc-toast` · `.pc-toast-actions` · `.pc-toast-container` / `--bottom-right` / `--bottom-left` / `--top-right` / `--top-left` · `.pc-tabs` · `.pc-tab-list` · `.pc-tab` · `.pc-tab-panel` · `.pc-progress` / `--blocks` · `.pc-taskbar` · `.pc-overlay` / `--print-hidden` · `.pc-menu` · `.pc-overflow-menu` · `.pc-group` · `.pc-statusbar` · `.pc-bevel-outset` / `--inset` · `.pc-link` · `.pc-sr-only` · `.pc-theme-light` / `.pc-theme-dark` / `.pc-theme-system`
 
 ## Themes & Accessibility
 
@@ -95,14 +95,18 @@ import {
   Progress,
   Taskbar,
   Overlay,
+  Modal,
+  ContentModal,
   Menu,
   MenuItem,
+  OverflowMenu,
   Group,
   StatusBar,
+  TitleBar,
 } from "@miquelt9/pc-ui";
 ```
 
-`Desktop tiled` + `Split` + `Window fill` for multi-pane layouts. `Overlay` wraps a `Window` for dialogs.
+`Desktop tiled` + `Split` + `Window fill` for multi-pane layouts. `Modal` is a confirmation dialog. `ContentModal` is a free-form dialog (`Overlay` + `Window`). `OverflowMenu` is the portaled "more" menu. Details: [.agents/chrome.md](./.agents/chrome.md).
 
 ## Develop
 

@@ -6,6 +6,7 @@ import {
   Desktop,
   Field,
   Input,
+  ContentModal,
   Modal,
   Progress,
   Split,
@@ -140,5 +141,30 @@ describe("React primitives", () => {
     expect(html).toContain("Sure?");
     expect(html).toContain(">OK<");
     expect(html).toContain(">Cancel<");
+  });
+
+  it("renders ContentModal as a free-form window without confirm actions", () => {
+    expect(
+      renderToStaticMarkup(
+        <ContentModal open={false} title="Hidden" onClose={() => {}}>
+          no
+        </ContentModal>
+      )
+    ).toBe("");
+
+    const html = renderToStaticMarkup(
+      <ContentModal title="Create a deck" onClose={() => {}} className="max-w-3xl">
+        <p>Name</p>
+      </ContentModal>
+    );
+    expect(html).toContain("pc-overlay pc-overlay--print-hidden");
+    expect(html).toContain("pc-window pc-window--freeform max-w-3xl");
+    expect(html).toContain('role="dialog"');
+    expect(html).toContain('aria-modal="true"');
+    expect(html).toContain('aria-label="Create a deck"');
+    expect(html).toContain("Create a deck");
+    expect(html).toContain("Name");
+    expect(html).not.toContain("pc-modal-actions");
+    expect(html).not.toContain(">OK<");
   });
 });

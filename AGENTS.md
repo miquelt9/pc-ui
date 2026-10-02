@@ -109,7 +109,7 @@ CSS: `.pc-desktop--tiled`, `.pc-workspace`, `.pc-split--row` / `--col`, `.pc-win
 | Need | Use |
 | --- | --- |
 | Button | `<Button>` / `.pc-button` / `--primary` / `[aria-busy]` |
-| Title bar | `<TitleBar>` / `.pc-titlebar` |
+| Title bar | `<TitleBar>` / `.pc-titlebar` (caption ellipsizes; controls stay visible) |
 | Window | `<Window>` / `.pc-window` + `.pc-window-content` |
 | Dark | `variant="dark"` / `.pc-window--dark` |
 | No inset body | `contentVariant="plain"` |
@@ -126,7 +126,9 @@ CSS: `.pc-desktop--tiled`, `.pc-workspace`, `.pc-split--row` / `--col`, `.pc-win
 | Taskbar | `<Taskbar>` / `.pc-taskbar` |
 | Dialog backdrop | `<Overlay>` / `.pc-overlay` |
 | Modal / confirm | `<Modal>` / `.pc-window--modal` / `--warning` / `--danger` |
+| Free-form modal | `<ContentModal>` / `.pc-window--freeform` inside `.pc-overlay` |
 | Menu | `<Menu>` / `.pc-menu` |
+| Overflow menu | `<OverflowMenu>` / `.pc-overflow-menu` |
 | Group box | `<Group>` / `.pc-group` |
 | Status bar | `<StatusBar>` / `.pc-statusbar` |
 | Screen reader text | `.pc-sr-only` |
