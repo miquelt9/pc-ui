@@ -76,7 +76,14 @@ const themeSelectors = [
   '[data-pc-theme="system"]',
 ];
 
-const docFiles = ["README.md", "AGENTS.md", ".agents/tokens.md", ".agents/testing.md"];
+const docFiles = [
+  "README.md",
+  "AGENTS.md",
+  ...readdirSync(join(repoRoot, ".agents"))
+    .filter((name) => name.endsWith(".md"))
+    .sort()
+    .map((name) => join(".agents", name)),
+];
 
 describe("CSS tokens", () => {
   it("matches the documented catalog to every token in tokens.css", () => {
