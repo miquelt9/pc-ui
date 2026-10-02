@@ -787,6 +787,11 @@
   background: var(--pc-overlay-bg);
 }
 
+/* Author display:flex would otherwise beat the hidden attribute. */
+.pc-overlay[hidden] {
+  display: none;
+}
+
 /* Modal dialog (centered .pc-window inside .pc-overlay) */
 .pc-window--modal {
   width: var(--pc-modal-width);
