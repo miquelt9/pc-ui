@@ -137,7 +137,14 @@ describe("CSS tokens", () => {
     const missing = [...tokenProps].filter((name) => !bundleProps.has(name));
     expect(missing).toEqual([]);
 
-    for (const className of [".pc-button", ".pc-window", ".pc-desktop", ".pc-taskbar"]) {
+    for (const className of [
+      ".pc-button",
+      ".pc-window",
+      ".pc-desktop",
+      ".pc-taskbar",
+      ".pc-overflow-menu",
+      ".pc-window--freeform",
+    ]) {
       expect(primitives, className).toContain(className);
       expect(bundle, className).toContain(className);
     }

@@ -28,6 +28,17 @@
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 16px;
     }
+    .demo-chrome-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .demo-chrome-row > .pc-window {
+      flex: 1 1 280px;
+      min-width: 0;
+      max-width: 100%;
+    }
   </style>
 </head>
 <body class="pc-desktop">
@@ -38,6 +49,73 @@
         Windows 9x presentational design system preview — WCAG AA contrast, focus rings, semantic tokens, and base primitives.
       </p>
     </header>
+
+    <section id="shared-chrome" class="demo-chrome-row" aria-label="Shared chrome">
+      <div class="pc-window">
+        <div class="pc-titlebar">
+          <div class="pc-titlebar-title">Edit clip — The Complete Unabridged Title Of A Musical Number That Must Stay Off The Close Button</div>
+          <div class="pc-titlebar-controls">
+            <button type="button" class="pc-titlebar-btn" aria-label="Minimize">_</button>
+            <button type="button" class="pc-titlebar-btn" aria-label="Maximize">□</button>
+            <button type="button" class="pc-titlebar-btn" aria-label="Close">X</button>
+          </div>
+        </div>
+        <div class="pc-window-content">
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-start;">
+            <div class="pc-overflow-menu" id="demo-overflow">
+              <button
+                type="button"
+                id="demo-overflow-trigger"
+                class="pc-button pc-overflow-menu-trigger pc-overflow-menu-trigger--labeled"
+                aria-label="More actions"
+                aria-expanded="true"
+                aria-haspopup="menu"
+                aria-controls="demo-overflow-panel"
+              >
+                <svg class="pc-overflow-menu-trigger-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="1"></circle>
+                  <circle cx="19" cy="12" r="1"></circle>
+                  <circle cx="5" cy="12" r="1"></circle>
+                </svg>
+                <span>More</span>
+              </button>
+              <div id="demo-overflow-panel" class="pc-overflow-menu-panel" role="menu" style="position: relative; margin-top: 6px;">
+                <button type="button" role="menuitem" class="pc-overflow-menu-item">
+                  <span class="pc-overflow-menu-item-icon" aria-hidden="true">↗</span>
+                  <span>Share</span>
+                </button>
+                <button type="button" role="menuitem" class="pc-overflow-menu-item pc-overflow-menu-item--destructive">
+                  <span>Remove</span>
+                </button>
+                <button type="button" role="menuitem" class="pc-overflow-menu-item pc-overflow-menu-item--disabled" disabled title="Unavailable">
+                  <span>Locked</span>
+                </button>
+              </div>
+            </div>
+            <button type="button" class="pc-button pc-overflow-menu-trigger" aria-label="More actions">
+              <svg class="pc-overflow-menu-trigger-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="1"></circle>
+                <circle cx="19" cy="12" r="1"></circle>
+                <circle cx="5" cy="12" r="1"></circle>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pc-window pc-window--freeform">
+        <div class="pc-titlebar">
+          <div class="pc-titlebar-title">Create a deck</div>
+          <div class="pc-titlebar-controls">
+            <button type="button" class="pc-titlebar-btn" aria-label="Close">X</button>
+          </div>
+        </div>
+        <div class="pc-window-content">
+          <p style="margin: 0 0 8px; font-size: 0.875rem;">Free-form dialog body. Confirmations stay on the OK / Cancel modal.</p>
+          <button type="button" class="pc-button pc-button--primary" data-modal-open="modal-content">Open content modal</button>
+        </div>
+      </div>
+    </section>
 
     <div class="demo-grid">
       <!-- Standard Window with Form Controls -->
@@ -230,6 +308,29 @@
     </footer>
   </div>
 
+  <!-- Free-form content modal -->
+  <div class="pc-overlay pc-overlay--modal pc-overlay--print-hidden" id="modal-content" hidden>
+    <div class="pc-window pc-window--freeform" role="dialog" aria-modal="true" aria-label="Create a deck">
+      <div class="pc-titlebar">
+        <div class="pc-titlebar-title">Create a deck</div>
+        <div class="pc-titlebar-controls">
+          <button type="button" class="pc-titlebar-btn" aria-label="Close" data-modal-close>X</button>
+        </div>
+      </div>
+      <div class="pc-window-content">
+        <p style="margin: 0 0 12px; font-size: 0.875rem;">Name the deck, then save it. This dialog has no built-in OK / Cancel row.</p>
+        <div class="pc-field">
+          <label class="pc-field-label" for="deck-name">Deck name</label>
+          <input class="pc-input" id="deck-name" type="text" value="Opening night">
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 8px;">
+          <button type="button" class="pc-button" data-modal-close>Cancel</button>
+          <button type="button" class="pc-button pc-button--primary" data-modal-close>Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Default confirmation -->
   <div class="pc-overlay pc-overlay--modal" id="modal-default" hidden>
     <div class="pc-window pc-window--modal" role="dialog" aria-modal="true" aria-labelledby="modal-default-title">
@@ -328,6 +429,18 @@
       const open = document.querySelector(".pc-overlay--modal:not([hidden])");
       if (open) closeModal(open);
     });
+
+    const overflowTrigger = document.getElementById("demo-overflow-trigger");
+    const overflowPanel = document.getElementById("demo-overflow-panel");
+    if (overflowTrigger && overflowPanel) {
+      overflowTrigger.addEventListener("click", () => {
+        const open = overflowTrigger.getAttribute("aria-expanded") === "true";
+        overflowTrigger.setAttribute("aria-expanded", open ? "false" : "true");
+        overflowPanel.hidden = open;
+      });
+    }
+
+    if (location.hash === "#content-modal") openModal("modal-content");
   </script>
 
   <!-- Bottom-Right Desktop Notifications Container -->

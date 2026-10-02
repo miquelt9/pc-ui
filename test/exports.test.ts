@@ -32,10 +32,14 @@ const publicComponents = [
   "Progress",
   "Taskbar",
   "Overlay",
+  "Modal",
+  "ContentModal",
   "Menu",
   "MenuItem",
+  "OverflowMenu",
   "Group",
   "StatusBar",
+  "TitleBar",
 ] as const;
 
 function exportTargets(value: string | Record<string, string>): string[] {
