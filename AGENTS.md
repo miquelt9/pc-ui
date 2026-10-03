@@ -2,6 +2,8 @@
 
 Presentational Windows 9x chrome. CSS is the primary API; React wrappers are optional and thin (`className` + children). Consumers own behavior: routing, drag, z-order, focus, print, data.
 
+How to change this repo: [.agents/AGENTS.md](./.agents/AGENTS.md). Package shape: [.agents/ARCHITECTURE.md](./.agents/ARCHITECTURE.md). Look: [.agents/DESIGN.md](./.agents/DESIGN.md).
+
 ## Consumers
 
 | Kind | How to use | Do not add |
