@@ -2,6 +2,8 @@
 
 Custom properties live in `src/tokens.css` (and the generated `src/pc-ui.css` bundle). Override them on `:root`, a `.pc-theme-*` class, or `[data-pc-theme]`. Names below are the ones the stylesheet defines.
 
+The page background is `--pc-desktop-bg`.
+
 ## Title-bar blue
 
 `--pc-titlebar-bg` is the title-bar blue: the active window caption color in this design system. Caption text is `--pc-titlebar-text`. Theme by overriding those two properties. Progress fills (`.pc-progress-bar`) use the same background, so they follow the title-bar blue.
