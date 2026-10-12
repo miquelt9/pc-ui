@@ -13,6 +13,7 @@
     "declaration": true,
     "declarationDir": "./dist",
     "outDir": "./dist",
+    "rootDir": "./src",
     "jsx": "react-jsx",
     "strict": true,
     "noUnusedLocals": true,
